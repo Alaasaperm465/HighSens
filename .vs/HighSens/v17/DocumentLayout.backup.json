@@ -1,0 +1,228 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\.net\\HighSens\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|f:\\.net\\highsens\\infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|solutionrelative:infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\inbound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\inbound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\inbounddetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\inbounddetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\outbound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\outbound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\outbounddetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\outbounddetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\section.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\section.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\stock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\stock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|f:\\.net\\highsens\\domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E79CF65-6AF4-44A1-A809-0DE8E97B0E8C}|Domain\\Domain.csproj|solutionrelative:domain\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|f:\\.net\\highsens\\infrastructure\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|solutionrelative:infrastructure\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DBContext.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\InfraStructure\\Context\\DBContext.cs",
+              "RelativeDocumentMoniker": "InfraStructure\\Context\\DBContext.cs",
+              "ToolTip": "F:\\.net\\HighSens\\InfraStructure\\Context\\DBContext.cs",
+              "RelativeToolTip": "InfraStructure\\Context\\DBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:24:59.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Client.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Client.cs",
+              "RelativeDocumentMoniker": "Domain\\Client.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Client.cs",
+              "RelativeToolTip": "Domain\\Client.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:19:17.93Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Inbound.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Inbound.cs",
+              "RelativeDocumentMoniker": "Domain\\Inbound.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Inbound.cs",
+              "RelativeToolTip": "Domain\\Inbound.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:19:12.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "InboundDetail.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\InboundDetail.cs",
+              "RelativeDocumentMoniker": "Domain\\InboundDetail.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\InboundDetail.cs",
+              "RelativeToolTip": "Domain\\InboundDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:19:08.174Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Outbound.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Outbound.cs",
+              "RelativeDocumentMoniker": "Domain\\Outbound.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Outbound.cs",
+              "RelativeToolTip": "Domain\\Outbound.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:19:03.495Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OutboundDetail.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\OutboundDetail.cs",
+              "RelativeDocumentMoniker": "Domain\\OutboundDetail.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\OutboundDetail.cs",
+              "RelativeToolTip": "Domain\\OutboundDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:18:58.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Product.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Product.cs",
+              "RelativeDocumentMoniker": "Domain\\Product.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Product.cs",
+              "RelativeToolTip": "Domain\\Product.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:18:54.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Section.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Section.cs",
+              "RelativeDocumentMoniker": "Domain\\Section.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Section.cs",
+              "RelativeToolTip": "Domain\\Section.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:18:49.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Stock.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\Stock.cs",
+              "RelativeDocumentMoniker": "Domain\\Stock.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\Stock.cs",
+              "RelativeToolTip": "Domain\\Stock.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:18:39.436Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "User.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\User.cs",
+              "RelativeDocumentMoniker": "Domain\\User.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\User.cs",
+              "RelativeToolTip": "Domain\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:18:02.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BaseEntity.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\Domain\\BaseEntity.cs",
+              "RelativeDocumentMoniker": "Domain\\BaseEntity.cs",
+              "ToolTip": "F:\\.net\\HighSens\\Domain\\BaseEntity.cs",
+              "RelativeToolTip": "Domain\\BaseEntity.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAAA8AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T20:14:48.052Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "F:\\.net\\HighSens\\InfraStructure\\Class1.cs",
+              "RelativeDocumentMoniker": "InfraStructure\\Class1.cs",
+              "ToolTip": "F:\\.net\\HighSens\\InfraStructure\\Class1.cs",
+              "RelativeToolTip": "InfraStructure\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T19:53:21.542Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
