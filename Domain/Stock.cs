@@ -2,7 +2,7 @@ using Domain;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frozen_Warehouse.Domain.Entities
+namespace HighSens.Domain
 {
     public class Stock: BaseEntity
     {

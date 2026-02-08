@@ -1,0 +1,47 @@
+﻿using InfraStructure.Context;
+using InfraStructure.Repos;
+using InfraStructure.UnitOfWork;
+using Frozen_Warehouse.Application.Services;
+using Frozen_Warehouse.Application.Interfaces.IServices;
+using Frozen_Warehouse.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+// Support both MVC controllers/views and Razor Pages
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+// add DBContext
+builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+
+// register repositories and services
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<Frozen_Warehouse.Application.Interfaces.IRepositories.IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+// Map default MVC route so root '/' goes to HomeController.Index
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Keep Razor Pages mapping
+app.MapRazorPages();
+
+app.Run();

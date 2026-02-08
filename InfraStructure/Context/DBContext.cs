@@ -1,4 +1,4 @@
-﻿using Frozen_Warehouse.Domain.Entities;
+﻿using HighSens.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ namespace InfraStructure.Context
             modelBuilder.Entity<InboundDetail>().HasOne(d => d.Inbound).WithMany(i => i.Details).HasForeignKey(d => d.InboundId).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<OutboundDetail>().HasOne(d => d.Outbound).WithMany(i => i.Details).HasForeignKey(d => d.OutboundId).OnDelete(DeleteBehavior.Cascade);
 
-            // Seed 8 sections
+            // Seed sections
             var sections = new[]
             {
                 new Section { Id = 1, Name = "S1" },
@@ -66,8 +66,8 @@ namespace InfraStructure.Context
 
             // Seed users with integer ids and plain text passwords (testing only)
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Username = "admin", Password = "123456", Role = Roles.Admin },
-                new User { Id = 2, Username = "storekeeper", Password = "123456", Role = Roles.StoreKeeper }
+                new User { Id = 1, Username = "admin", Password = "123456", Role = HighSens.Domain.Roles.Admin, CreatedAt = DateTime.UtcNow },
+                new User { Id = 2, Username = "storekeeper", Password = "123456", Role = HighSens.Domain.Roles.StoreKeeper, CreatedAt = DateTime.UtcNow }
             );
         }
 

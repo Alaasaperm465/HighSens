@@ -1,36 +1,46 @@
-namespace MVC
+using InfraStructure.Context;
+using InfraStructure.Repos;
+using InfraStructure.UnitOfWork;
+using HighSens.Application.Interfaces.IServices;
+using HighSens.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+// Support both MVC controllers/views and Razor Pages
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+// add DBContext
+builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+
+// register repositories and services
+builder.Services.AddScoped<IProductService, IProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapStaticAssets();
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
-
-            app.Run();
-        }
-    }
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+// Map default MVC route so root '/' goes to HomeController.Index
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Keep Razor Pages mapping
+app.MapRazorPages();
+
+app.Run();

@@ -544,6 +544,24 @@
           "build/net8.0/Microsoft.EntityFrameworkCore.Design.props": {}
         }
       },
+      "Microsoft.EntityFrameworkCore.InMemory/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.0",
+          "Microsoft.Extensions.Caching.Memory": "9.0.0",
+          "Microsoft.Extensions.Logging": "9.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
         "type": "package",
         "dependencies": {
@@ -1597,6 +1615,19 @@
             "assetType": "runtime",
             "rid": "win"
           }
+        }
+      },
+      "Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Application.dll": {}
         }
       },
       "Domain/1.0.0": {
@@ -2854,6 +2885,21 @@
         "lib/net8.0/Microsoft.EntityFrameworkCore.Design.xml",
         "microsoft.entityframeworkcore.design.9.0.0.nupkg.sha512",
         "microsoft.entityframeworkcore.design.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/9.0.0": {
+      "sha512": "Pm4NBnv3aB8O5bBNwWRkL4a/H+3WdgKRKYD93FkR9TrUNb0jfns9JVN5w9WEUsQCm0C69Eg2Y85i8pdmSfaNnQ==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.inmemory/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.xml",
+        "microsoft.entityframeworkcore.inmemory.9.0.0.nupkg.sha512",
+        "microsoft.entityframeworkcore.inmemory.nuspec"
       ]
     },
     "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
@@ -4712,6 +4758,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Application/1.0.0": {
+      "type": "project",
+      "path": "../Application/Application.csproj",
+      "msbuildProject": "../Application/Application.csproj"
+    },
     "Domain/1.0.0": {
       "type": "project",
       "path": "../Domain/Domain.csproj",
@@ -4720,8 +4771,10 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Application >= 1.0.0",
       "Domain >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 9.0.0",
+      "Microsoft.EntityFrameworkCore.InMemory >= 9.0.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0"
     ]
@@ -4758,6 +4811,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "F:\\.net\\HighSens\\Application\\Application.csproj": {
+              "projectPath": "F:\\.net\\HighSens\\Application\\Application.csproj"
+            },
             "F:\\.net\\HighSens\\Domain\\Domain.csproj": {
               "projectPath": "F:\\.net\\HighSens\\Domain\\Domain.csproj"
             }
@@ -4781,6 +4837,10 @@
         "targetAlias": "net9.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
+          "Microsoft.EntityFrameworkCore.InMemory": {
             "target": "Package",
             "version": "[9.0.0, )"
           },

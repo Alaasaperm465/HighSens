@@ -1,0 +1,17 @@
+﻿using Frozen_Warehouse.Domain.Interfaces;
+using InfraStructure.Context;
+
+namespace InfraStructure.UnitOfWork
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly DBContext _db;
+        public UnitOfWork(DBContext db) { _db = db; }
+        public async Task<int> SaveChangesAsync() => await _db.SaveChangesAsync();
+
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

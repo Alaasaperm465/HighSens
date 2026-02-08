@@ -1,0 +1,40 @@
+﻿namespace MVC
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddRazorPages();
+
+            // add DBContext
+            var conn = builder.Configuration.GetConnectionString("DefaultConnection") ?? "DataSource=:memory:";
+            builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+
+            // register repositories and services
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+            var app = builder.Build();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapRazorPages();
+
+            app.Run();
+        }
+    }
+}

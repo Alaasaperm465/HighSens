@@ -1,4 +1,4 @@
-namespace Frozen_Warehouse.Domain.Entities
+namespace HighSens.Domain
 {
     using global::Domain;
     using System.Collections.Generic;

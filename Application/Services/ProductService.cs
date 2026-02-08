@@ -1,0 +1,44 @@
+using HighSens.Application.DTOs.Product;
+using HighSens.Application.Interfaces.IServices;
+using HighSens.Application.Interfaces.IRepositories;
+using HighSens.Domain;
+//using HighSens.Domain.Interfaces;
+using  HighSens.Application.Interfaces.IRepositories;
+using Frozen_Warehouse.Domain.Interfaces;
+using IProductRepository = Frozen_Warehouse.Domain.Interfaces.IProductRepository;
+
+namespace Frozen_Warehouse.Application.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IProductRepository _repo;
+        private readonly IUnitOfWork _uow;
+
+        public ProductService(IProductRepository repo, IUnitOfWork uow)
+        {
+            _repo = repo;
+            _uow = uow;
+        }
+
+        public async Task<ProductDto> CreateAsync(CreateProductRequest request)
+        {
+            var product = new Product { Name = request.Name };
+            await _repo.AddAsync(product);
+            await _uow.SaveChangesAsync();
+            return new ProductDto { Id = product.Id, Name = product.Name };
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
+        {
+            var entities = await _repo.GetAllAsync();
+            return entities.Select(p => new ProductDto { Id = p.Id, Name = p.Name }).ToList();
+        }
+
+        public async Task<ProductDto?> GetByIdAsync(int id)
+        {
+            var entity = await _repo.GetByIdAsync(id);
+            if (entity == null) return null;
+            return new ProductDto { Id = entity.Id, Name = entity.Name };
+        }
+    }
+}

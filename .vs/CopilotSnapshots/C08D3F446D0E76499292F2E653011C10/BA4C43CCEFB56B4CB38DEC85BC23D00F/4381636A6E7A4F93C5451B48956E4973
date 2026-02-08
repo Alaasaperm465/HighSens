@@ -1,0 +1,67 @@
+﻿using Frozen_Warehouse.Application.DTOs.Product;
+using Frozen_Warehouse.Application.Interfaces.IServices;
+using Frozen_Warehouse.Domain.Entities;
+using Frozen_Warehouse.Application.Interfaces.IRepositories;
+
+namespace Frozen_Warehouse.Application.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IProductRepository _repo;
+        public ProductService(IProductRepository repo) { _repo = repo; }
+
+        public async Task<ProductResponseDto> CreateAsync(CreateProductDto dto)
+        {
+            var entity = new Product { Name = dto.Name.Trim(), IsActive = true, CreatedAt = DateTime.UtcNow };
+            await _repo.AddAsync(entity);
+            await _repo.SaveChangesAsync();
+            return new ProductResponseDto { Id = entity.Id, Name = entity.Name, IsActive = entity.IsActive };
+        }
+
+        public async Task<IEnumerable<ProductResponseDto>> GetAllAsync()
+        {
+            var products = await _repo.GetAllAsync();
+            return products.Select(p => new ProductResponseDto { Id = p.Id, Name = p.Name, IsActive = p.IsActive });
+        }
+
+        public async Task<ProductResponseDto?> GetByIdAsync(int id)
+        {
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null) return null;
+            return new ProductResponseDto { Id = p.Id, Name = p.Name, IsActive = p.IsActive };
+        }
+
+        public async Task<ProductResponseDto?> UpdateAsync(int id, UpdateProductDto dto)
+        {
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null) return null;
+            if (!p.IsActive) throw new InvalidOperationException("Product archived");
+            var hasStock = await _repo.AnyStockAsync(id);
+            if (hasStock) throw new InvalidOperationException("Product has stock");
+            p.Name = dto.Name.Trim();
+            p.UpdatedAt = DateTime.UtcNow;
+            await _repo.SaveChangesAsync();
+            return new ProductResponseDto { Id = p.Id, Name = p.Name, IsActive = p.IsActive };
+        }
+
+        public async Task<bool> ArchiveAsync(int id)
+        {
+            var p = await _repo.GetByIdAsync(id);
+            if (p == null) return false;
+            p.IsActive = false;
+            p.UpdatedAt = DateTime.UtcNow;
+            await _repo.SaveChangesAsync();
+            return true;
+        }
+
+        public Task ProductOverlapAsync(ProductOverlapDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ProductTransferAsync(ProductTransferDto dto)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

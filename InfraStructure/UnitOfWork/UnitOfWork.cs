@@ -1,0 +1,12 @@
+using HighSens.Domain.Interfaces;
+using InfraStructure.Context;
+
+namespace InfraStructure.UnitOfWork
+{
+    public class UnitOfWork : IUnitOfWork
+    {
+        private readonly DBContext _db;
+        public UnitOfWork(DBContext db) { _db = db; }
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _db.SaveChangesAsync(cancellationToken);
+    }
+}

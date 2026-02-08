@@ -1,0 +1,31 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using MVC.Controllers.Dtos;
+
+namespace MVC.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        // For now this controller will perform a simple username/password check using DBContext
+        private readonly InfraStructure.Context.DBContext _db;
+        public AuthController(InfraStructure.Context.DBContext db)
+        {
+            _db = db;
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = _db.Users.FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
+            if (user == null) return Unauthorized();
+
+            // return simple payload for now
+            return Ok(new { username = user.Username, role = user.Role });
+        }
+    }
+}
