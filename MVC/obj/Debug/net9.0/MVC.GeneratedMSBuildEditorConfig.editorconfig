@@ -36,6 +36,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Alaa Sabar 2/Backend/HighSens/MVC/Views/Inbound/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5ib3VuZFxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Alaa Sabar 2/Backend/HighSens/MVC/Views/Inbound/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5ib3VuZFxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Alaa Sabar 2/Backend/HighSens/MVC/Views/Inbound/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW5ib3VuZFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Alaa Sabar 2/Backend/HighSens/MVC/Views/Outbound/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3V0Ym91bmRcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

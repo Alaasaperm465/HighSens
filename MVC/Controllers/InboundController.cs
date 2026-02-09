@@ -1,95 +1,154 @@
-using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using HighSens.Application.DTOs.Inbound;
 using HighSens.Application.Interfaces.IServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.ViewModels.Inbound;
 
 namespace MVC.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class InboundController : ControllerBase
+    public class InboundController : Controller
     {
         private readonly IInboundService _inboundService;
+        private readonly HighSens.Application.Interfaces.IServices.IClientService _clientService;
+        private readonly HighSens.Application.Interfaces.IServices.IProductService _productService;
+        private readonly HighSens.Application.Interfaces.IServices.ISectionService _sectionService;
+        private readonly IMapper _mapper;
 
-        public InboundController(IInboundService inboundService)
+        public InboundController(
+            IInboundService inboundService,
+            HighSens.Application.Interfaces.IServices.IClientService clientService,
+            HighSens.Application.Interfaces.IServices.IProductService productService,
+            HighSens.Application.Interfaces.IServices.ISectionService sectionService,
+            IMapper mapper)
         {
             _inboundService = inboundService;
+            _clientService = clientService;
+            _productService = productService;
+            _sectionService = sectionService;
+            _mapper = mapper;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var inbounds = await _inboundService.GetAllInboundsAsync();
+            var model = _mapper.Map<IEnumerable<InboundListVM>>(inbounds);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            var clients = await _clientService.GetAllAsync();
+            var products = await _productService.GetAllAsync();
+            var sections = await _sectionService.GetAllAsync();
+
+            var vm = new InboundCreateVM
+            {
+                Clients = clients.Select(c => new SelectListItem(c.Name, c.Id.ToString())),
+                Products = products.Select(p => new SelectListItem(p.Name, p.Id.ToString())),
+                Sections = sections.Select(s => new SelectListItem(s.Name, s.Id.ToString())),
+                Details = new List<InboundDetailVM> { new InboundDetailVM() }
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateInboundRequest request)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(InboundCreateVM vm)
         {
+            // reload selects when returning view
+            async Task PopulateLookups()
+            {
+                var clients = await _clientService.GetAllAsync();
+                var products = await _productService.GetAllAsync();
+                var sections = await _sectionService.GetAllAsync();
+
+                vm.Clients = clients.Select(c => new SelectListItem(c.Name, c.Id.ToString()));
+                vm.Products = products.Select(p => new SelectListItem(p.Name, p.Id.ToString()));
+                vm.Sections = sections.Select(s => new SelectListItem(s.Name, s.Id.ToString()));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateLookups();
+                return View(vm);
+            }
+
+            var clientDto = await _clientService.GetByIdAsync(vm.ClientId);
+            if (clientDto == null)
+            {
+                ModelState.AddModelError(nameof(vm.ClientId), "Selected client does not exist");
+                await PopulateLookups();
+                return View(vm);
+            }
+
+            var lines = new List<InboundLineRequest>();
+            var allSections = (await _sectionService.GetAllAsync()).ToList();
+
+            foreach (var line in vm.Details)
+            {
+                var productDto = await _productService.GetByIdAsync(line.ProductId);
+                var sectionDto = allSections.FirstOrDefault(s => s.Id == line.SectionId);
+
+                if (productDto == null)
+                {
+                    ModelState.AddModelError(string.Empty, $"Product not found for id {line.ProductId}");
+                    break;
+                }
+                if (sectionDto == null)
+                {
+                    ModelState.AddModelError(string.Empty, $"Section not found for id {line.SectionId}");
+                    break;
+                }
+                if (line.Cartons < 0 || line.Pallets < 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Cartons and Pallets must be non-negative");
+                    break;
+                }
+
+                lines.Add(new InboundLineRequest
+                {
+                    ProductName = productDto.Name,
+                    SectionName = sectionDto.Name,
+                    Cartons = line.Cartons,
+                    Pallets = line.Pallets
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateLookups();
+                return View(vm);
+            }
+
+            var request = new CreateInboundRequest
+            {
+                ClientName = clientDto.Name,
+                Lines = lines
+            };
+
             try
             {
                 var id = await _inboundService.CreateInboundAsync(request);
-                return CreatedAtAction(nameof(Create), new { id }, new { id });
+                return RedirectToAction(nameof(Details), new { id });
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await PopulateLookups();
+                return View(vm);
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllInbound()
+        public async Task<IActionResult> Details(int id)
         {
-            try
-            {
-                var inbounds = await _inboundService.GetAllInboundsAsync();
-                return Ok(inbounds);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-        // Distinct route for daily report to avoid duplicate HTTP GET route conflicts
-        [HttpGet("daily-report")]
-        public async Task<IActionResult> GetDailyInboundReport()
-        {
-            try
-            {
-                var report = await _inboundService.GetDailyInboundReportAsync();
-                return Ok(report);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-        [HttpGet("ReportFromTo")]
-        public async Task<IActionResult> GetInboundReportFromTo(DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                var report = await _inboundService.GetInboundReportFromToAsync(startDate, endDate);
-                return Ok(report);
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-        [HttpPost("update/{id}")]
-        public async Task<IActionResult> UpdateInbound(int id, UpdateInboundRequest request)
-        {
-            try
-            {
-                await _inboundService.UpdateInboundAsync(id, request);
-                return NoContent();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
+            var inbounds = await _inboundService.GetAllInboundsAsync();
+            var inbound = inbounds.FirstOrDefault(i => i.Id == id);
+            if (inbound == null) return NotFound();
 
+            var vm = _mapper.Map<InboundDetailsVM>(inbound);
+            return View(vm);
+        }
     }
 }
