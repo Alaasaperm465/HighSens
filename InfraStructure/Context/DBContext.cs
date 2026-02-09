@@ -23,6 +23,8 @@ namespace InfraStructure.Context
         public DbSet<Outbound> Outbounds { get; set; } = null!;
         public DbSet<OutboundDetail> OutboundDetails { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
+        public DbSet<ProductStock> ProductStocks { get; set; } = null!;
+        public DbSet<SectionStock> SectionStocks { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,6 +34,9 @@ namespace InfraStructure.Context
             modelBuilder.Entity<Product>().HasQueryFilter(p => p.IsActive);
 
             modelBuilder.Entity<Stock>().HasIndex(s => new { s.ClientId, s.ProductId, s.SectionId }).IsUnique();
+
+            modelBuilder.Entity<ProductStock>().HasIndex(p => new { p.ClientId, p.ProductId }).IsUnique();
+            modelBuilder.Entity<SectionStock>().HasIndex(s => new { s.ClientId, s.SectionId }).IsUnique();
 
             // Configure relationships from Stock side to avoid requiring navigation collections on Client/Product/Section
             modelBuilder.Entity<Stock>()
@@ -50,6 +55,30 @@ namespace InfraStructure.Context
                 .HasOne(s => s.Section)
                 .WithMany()
                 .HasForeignKey(s => s.SectionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductStock>()
+                .HasOne(ps => ps.Product)
+                .WithMany()
+                .HasForeignKey(ps => ps.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductStock>()
+                .HasOne(ps => ps.Client)
+                .WithMany()
+                .HasForeignKey(ps => ps.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SectionStock>()
+                .HasOne(ss => ss.Section)
+                .WithMany()
+                .HasForeignKey(ss => ss.SectionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SectionStock>()
+                .HasOne(ss => ss.Client)
+                .WithMany()
+                .HasForeignKey(ss => ss.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // relationships for inbound/outbound details

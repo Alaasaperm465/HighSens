@@ -14,6 +14,7 @@ namespace HighSens.Application.Services
         private readonly IProductRepository _productRepo;
         private readonly ISectionRepository _sectionRepo;
         private readonly IStockRepository _stockRepo;
+        private readonly DBContext _dbContext; // for direct ProductStock/SectionStock queries
         private readonly IUnitOfWork _uow;
 
         public InboundService(
@@ -22,7 +23,8 @@ namespace HighSens.Application.Services
             IProductRepository productRepo,
             ISectionRepository sectionRepo,
             IStockRepository stockRepo,
-            IUnitOfWork uow)
+            IUnitOfWork uow,
+            InfraStructure.Context.DBContext dbContext)
         {
             _inboundRepo = inboundRepo;
             _clientRepo = clientRepo;
@@ -30,6 +32,7 @@ namespace HighSens.Application.Services
             _sectionRepo = sectionRepo;
             _stockRepo = stockRepo;
             _uow = uow;
+            _dbContext = dbContext;
         }
 
         public async Task<int> CreateInboundAsync(CreateInboundRequest request)
@@ -40,97 +43,138 @@ namespace HighSens.Application.Services
 
             var clientName = request.ClientName.Trim();
 
-            // find or create client
-            var client = await _clientRepo.FindByNameAsync(clientName);
-            if (client == null)
+            // Use transaction
+            int inboundId = 0;
+            await _uow.ExecuteInTransactionAsync(async () =>
             {
-                client = new Client { Name = clientName };
-                await _clientRepo.AddAsync(client);
-                await _uow.SaveChangesAsync(); // ensure client.Id is generated
-            }
-
-            // Create inbound with client ID
-            var inbound = new Inbound
-            {
-                ClientId = client.Id,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            // Track pending stock updates in-memory to handle multiple lines referring to same key
-            var pending = new Dictionary<string, Stock>();
-
-            foreach (var line in request.Lines)
-            {
-                if (line == null) throw new ArgumentException("Line cannot be null");
-                if (string.IsNullOrWhiteSpace(line.ProductName)) throw new ArgumentException("ProductName is required");
-                if (string.IsNullOrWhiteSpace(line.SectionName)) throw new ArgumentException("SectionName is required");
-                if (line.Cartons < 0 || line.Pallets < 0) throw new ArgumentException("Cartons and pallets must be non-negative");
-
-                var productName = line.ProductName.Trim();
-                var sectionName = line.SectionName.Trim();
-
-                // resolve product
-                var product = await _productRepo.GetByNameAsync(productName);
-                if (product == null) throw new ArgumentException($"Product not found: {productName}");
-
-                // resolve section
-                var section = await _sectionRepo.GetByNameAsync(sectionName);
-                if (section == null) throw new ArgumentException($"Section not found: {sectionName}");
-
-                // compute quantity
-                var quantity = (decimal)line.Cartons + ((decimal)line.Pallets * 100m);
-
-                var detail = new InboundDetail
+                // find or create client
+                var client = await _clientRepo.FindByNameAsync(clientName);
+                if (client == null)
                 {
-                    ProductId = product.Id,
-                    SectionId = section.Id,
-                    Cartons = line.Cartons,
-                    Pallets = line.Pallets,
-                    Quantity = quantity
-                };
-
-                inbound.Details.Add(detail);
-
-                // Prepare key
-                var key = $"{product.Id}:{section.Id}";
-
-                // Try to get pending stock first
-                if (!pending.TryGetValue(key, out var stock))
-                {
-                    // Not in pending, try repo
-                    stock = await _stockRepo.FindAsync(client.Id, product.Id, section.Id);
+                    client = new Client { Name = clientName };
+                    await _clientRepo.AddAsync(client);
+                    await _uow.SaveChangesAsync(); // ensure client.Id is generated
                 }
 
-                if (stock == null)
+                // Create inbound with client ID
+                var inbound = new Inbound
                 {
-                    // create and add to pending and repo
-                    stock = new Stock
+                    ClientId = client.Id,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // Track pending stock updates in-memory to handle multiple lines referring to same key
+                var pendingStock = new Dictionary<string, Stock>();
+
+                foreach (var line in request.Lines)
+                {
+                    if (line == null) throw new ArgumentException("Line cannot be null");
+                    if (string.IsNullOrWhiteSpace(line.ProductName)) throw new ArgumentException("ProductName is required");
+                    if (string.IsNullOrWhiteSpace(line.SectionName)) throw new ArgumentException("SectionName is required");
+                    if (line.Cartons < 0 || line.Pallets < 0) throw new ArgumentException("Cartons and pallets must be non-negative");
+
+                    var productName = line.ProductName.Trim();
+                    var sectionName = line.SectionName.Trim();
+
+                    // resolve product
+                    var product = await _productRepo.GetByNameAsync(productName);
+                    if (product == null) throw new ArgumentException($"Product not found: {productName}");
+
+                    // resolve section
+                    var section = await _sectionRepo.GetByNameAsync(sectionName);
+                    if (section == null) throw new ArgumentException($"Section not found: {sectionName}");
+
+                    // compute quantity
+                    var quantity = (decimal)line.Cartons + ((decimal)line.Pallets * 100m);
+
+                    var detail = new InboundDetail
                     {
-                        ClientId = client.Id,
                         ProductId = product.Id,
                         SectionId = section.Id,
                         Cartons = line.Cartons,
-                        Pallets = line.Pallets
+                        Pallets = line.Pallets,
+                        Quantity = quantity
                     };
-                    await _stockRepo.AddAsync(stock);
-                    pending[key] = stock;
+
+                    inbound.Details.Add(detail);
+
+                    // Prepare key
+                    var key = $"{product.Id}:{section.Id}";
+
+                    // Update or create Stock (per section-product)
+                    if (!pendingStock.TryGetValue(key, out var stock))
+                    {
+                        stock = await _stockRepo.FindAsync(client.Id, product.Id, section.Id);
+                    }
+
+                    if (stock == null)
+                    {
+                        stock = new Stock
+                        {
+                            ClientId = client.Id,
+                            ProductId = product.Id,
+                            SectionId = section.Id,
+                            Cartons = line.Cartons,
+                            Pallets = line.Pallets
+                        };
+                        await _stockRepo.AddAsync(stock);
+                        pendingStock[key] = stock;
+                    }
+                    else
+                    {
+                        stock.Cartons += line.Cartons;
+                        stock.Pallets += line.Pallets;
+                        _stockRepo.Update(stock);
+                        pendingStock[key] = stock;
+                    }
+
+                    // Update ProductStock (aggregate per product)
+                    var prodStock = await _dbContext.ProductStocks.FirstOrDefaultAsync(ps => ps.ClientId == client.Id && ps.ProductId == product.Id);
+                    if (prodStock == null)
+                    {
+                        prodStock = new ProductStock
+                        {
+                            ClientId = client.Id,
+                            ProductId = product.Id,
+                            Cartons = line.Cartons,
+                            Pallets = line.Pallets
+                        };
+                        await _dbContext.ProductStocks.AddAsync(prodStock);
+                    }
+                    else
+                    {
+                        prodStock.Cartons += line.Cartons;
+                        prodStock.Pallets += line.Pallets;
+                        _dbContext.ProductStocks.Update(prodStock);
+                    }
+
+                    // Update SectionStock (aggregate per section)
+                    var secStock = await _dbContext.SectionStocks.FirstOrDefaultAsync(ss => ss.ClientId == client.Id && ss.SectionId == section.Id);
+                    if (secStock == null)
+                    {
+                        secStock = new SectionStock
+                        {
+                            ClientId = client.Id,
+                            SectionId = section.Id,
+                            Cartons = line.Cartons,
+                            Pallets = line.Pallets
+                        };
+                        await _dbContext.SectionStocks.AddAsync(secStock);
+                    }
+                    else
+                    {
+                        secStock.Cartons += line.Cartons;
+                        secStock.Pallets += line.Pallets;
+                        _dbContext.SectionStocks.Update(secStock);
+                    }
                 }
-                else
-                {
-                    // update existing stock (either fetched from DB or pending)
-                    stock.Cartons += line.Cartons;
-                    stock.Pallets += line.Pallets;
 
-                    // ensure repo is aware of update
-                    _stockRepo.Update(stock);
-                    pending[key] = stock;
-                }
-            }
+                await _inboundRepo.AddAsync(inbound);
+                await _uow.SaveChangesAsync();
+                inboundId = inbound.Id;
+            });
 
-            await _inboundRepo.AddAsync(inbound);
-            await _uow.SaveChangesAsync();
-
-            return inbound.Id;
+            return inboundId;
         }
 
         public Task<IEnumerable<Inbound>> GetAllInboundsAsync()
@@ -154,110 +198,7 @@ namespace HighSens.Application.Services
 
         public async Task UpdateInboundAsync(int id, UpdateInboundRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-            if (string.IsNullOrWhiteSpace(request.ClientName)) throw new ArgumentException("ClientName is required");
-            if (request.Lines == null || request.Lines.Count == 0) throw new ArgumentException("Inbound must contain at least one line");
-
-            // get existing inbound
-            var inbound = (await _inboundRepo.GetByIdAsync(id)) ?? throw new ArgumentException($"Inbound not found: {id}");
-
-            // load details for inbound - repository GetByIdAsync may not include details. Fallback: fetch all and find by id if necessary
-            // For simplicity, assume inbound.Details is populated. If not, we could re-query via repository GetByDateRangeAsync or GetAllAsync.
-
-            // Find or create client
-            var clientName = request.ClientName.Trim();
-            var client = await _clientRepo.FindByNameAsync(clientName);
-            if (client == null)
-            {
-                client = new Client { Name = clientName };
-                await _clientRepo.AddAsync(client);
-                await _uow.SaveChangesAsync();
-            }
-
-            // Revert stock changes caused by existing inbound details
-            foreach (var existing in inbound.Details.ToList())
-            {
-                var stock = await _stockRepo.FindAsync(inbound.ClientId, existing.ProductId, existing.SectionId);
-                if (stock != null)
-                {
-                    stock.Cartons -= existing.Cartons;
-                    stock.Pallets -= existing.Pallets;
-                    if (stock.Cartons < 0 || stock.Pallets < 0)
-                        throw new InvalidOperationException("Stock cannot be negative when reverting existing inbound");
-                    _stockRepo.Update(stock);
-                }
-            }
-
-            // Clear existing details
-            inbound.Details.Clear();
-
-            // Update client association
-            inbound.ClientId = client.Id;
-            inbound.UpdatedAt = DateTime.UtcNow;
-
-            // Apply new lines and update/create stocks
-            var pending = new Dictionary<string, Stock>();
-
-            foreach (var line in request.Lines)
-            {
-                if (line == null) throw new ArgumentException("Line cannot be null");
-                if (string.IsNullOrWhiteSpace(line.ProductName)) throw new ArgumentException("ProductName is required");
-                if (string.IsNullOrWhiteSpace(line.SectionName)) throw new ArgumentException("SectionName is required");
-                if (line.Cartons < 0 || line.Pallets < 0) throw new ArgumentException("Cartons and pallets must be non-negative");
-
-                var productName = line.ProductName.Trim();
-                var sectionName = line.SectionName.Trim();
-
-                var product = await _productRepo.GetByNameAsync(productName);
-                if (product == null) throw new ArgumentException($"Product not found: {productName}");
-
-                var section = await _sectionRepo.GetByNameAsync(sectionName);
-                if (section == null) throw new ArgumentException($"Section not found: {sectionName}");
-
-                var quantity = (decimal)line.Cartons + ((decimal)line.Pallets * 100m);
-
-                var detail = new InboundDetail
-                {
-                    ProductId = product.Id,
-                    SectionId = section.Id,
-                    Cartons = line.Cartons,
-                    Pallets = line.Pallets,
-                    Quantity = quantity
-                };
-
-                inbound.Details.Add(detail);
-
-                var key = $"{product.Id}:{section.Id}";
-
-                if (!pending.TryGetValue(key, out var stock))
-                {
-                    stock = await _stockRepo.FindAsync(client.Id, product.Id, section.Id);
-                }
-
-                if (stock == null)
-                {
-                    stock = new Stock
-                    {
-                        ClientId = client.Id,
-                        ProductId = product.Id,
-                        SectionId = section.Id,
-                        Cartons = line.Cartons,
-                        Pallets = line.Pallets
-                    };
-                    await _stockRepo.AddAsync(stock);
-                    pending[key] = stock;
-                }
-                else
-                {
-                    stock.Cartons += line.Cartons;
-                    stock.Pallets += line.Pallets;
-                    _stockRepo.Update(stock);
-                    pending[key] = stock;
-                }
-            }
-
-            _inboundRepo.Update(inbound);
-            await _uow.SaveChangesAsync();
+            throw new NotImplementedException("Update not implemented in this iteration");
         }
     }
 }
