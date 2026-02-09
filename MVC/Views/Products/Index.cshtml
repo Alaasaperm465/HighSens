@@ -1,0 +1,15 @@
+@model IEnumerable<HighSens.Domain.Product>
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Products</h1>
+<p><a class="btn btn-primary" href="/Products/Create">Create Product</a></p>
+<table class="table table-striped">
+    <thead><tr><th>Id</th><th>Name</th><th>Active</th></tr></thead>
+    <tbody>
+    @foreach(var p in Model) {
+        <tr><td>@p.Id</td><td>@p.Name</td><td>@p.IsActive</td></tr>
+    }
+    </tbody>
+</table>

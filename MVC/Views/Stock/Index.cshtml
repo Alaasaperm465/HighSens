@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Stock";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Check Stock</h1>
+<form method="post" asp-action="Check">
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <label class="form-label">Client Id</label>
+            <input class="form-control" name="clientId" />
+        </div>
+        <div class="col-md-3 mb-3">
+            <label class="form-label">Product Id</label>
+            <input class="form-control" name="productId" />
+        </div>
+        <div class="col-md-3 mb-3">
+            <label class="form-label">Section Id</label>
+            <input class="form-control" name="sectionId" />
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Check Stock</button>
+</form>
+@if(ViewBag.Message != null) {
+    <div class="alert alert-info mt-3">
+        <p>@ViewBag.Message</p>
+        <p>Cartons: @ViewBag.Cartons</p>
+        <p>Pallets: @ViewBag.Pallets</p>
+    </div>
+}

@@ -1,0 +1,13 @@
+@model HighSens.Domain.Client
+@{
+    ViewData["Title"] = "Create Client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Create Client</h1>
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input class="form-control" asp-for="Name" name="Name" />
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>

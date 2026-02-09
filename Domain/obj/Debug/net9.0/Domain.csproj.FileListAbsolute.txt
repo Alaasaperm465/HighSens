@@ -1,0 +1,24 @@
+F:\.net\HighSens\Domain\bin\Debug\net9.0\Domain.deps.json
+F:\.net\HighSens\Domain\bin\Debug\net9.0\Domain.dll
+F:\.net\HighSens\Domain\bin\Debug\net9.0\Domain.pdb
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.dll
+F:\.net\HighSens\Domain\obj\Debug\net9.0\refint\Domain.dll
+F:\.net\HighSens\Domain\obj\Debug\net9.0\Domain.pdb
+F:\.net\HighSens\Domain\obj\Debug\net9.0\ref\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\Domain\bin\Debug\net9.0\Domain.deps.json
+E:\Alaa Sabar 2\Backend\HighSens\Domain\bin\Debug\net9.0\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\Domain\bin\Debug\net9.0\Domain.pdb
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\refint\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.pdb
+E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\ref\Domain.dll

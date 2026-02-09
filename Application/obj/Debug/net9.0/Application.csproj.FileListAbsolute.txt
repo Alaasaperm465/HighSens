@@ -1,0 +1,32 @@
+F:\.net\HighSens\Application\bin\Debug\net9.0\Application.deps.json
+F:\.net\HighSens\Application\bin\Debug\net9.0\Application.dll
+F:\.net\HighSens\Application\bin\Debug\net9.0\Application.pdb
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.AssemblyInfoInputs.cache
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.AssemblyInfo.cs
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.csproj.CoreCompileInputs.cache
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.sourcelink.json
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.dll
+F:\.net\HighSens\Application\obj\Debug\net9.0\refint\Application.dll
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.pdb
+F:\.net\HighSens\Application\obj\Debug\net9.0\ref\Application.dll
+F:\.net\HighSens\Application\obj\Debug\net9.0\Application.csproj.AssemblyReference.cache
+F:\.net\HighSens\Application\bin\Debug\net9.0\Domain.dll
+F:\.net\HighSens\Application\bin\Debug\net9.0\Domain.pdb
+F:\.net\HighSens\Application\obj\Debug\net9.0\Applicat.44B5EDA2.Up2Date
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.csproj.AssemblyReference.cache
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.AssemblyInfoInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.AssemblyInfo.cs
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.csproj.CoreCompileInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.sourcelink.json
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.dll
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\refint\Application.dll
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Application.pdb
+E:\Alaa Sabar 2\Backend\HighSens\Application\bin\Debug\net9.0\Application.deps.json
+E:\Alaa Sabar 2\Backend\HighSens\Application\bin\Debug\net9.0\Application.dll
+E:\Alaa Sabar 2\Backend\HighSens\Application\bin\Debug\net9.0\Application.pdb
+E:\Alaa Sabar 2\Backend\HighSens\Application\bin\Debug\net9.0\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\Application\bin\Debug\net9.0\Domain.pdb
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\Applicat.44B5EDA2.Up2Date
+E:\Alaa Sabar 2\Backend\HighSens\Application\obj\Debug\net9.0\ref\Application.dll

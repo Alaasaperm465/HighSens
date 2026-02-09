@@ -1,0 +1,36 @@
+using Microsoft.AspNetCore.Mvc;
+using InfraStructure.Context;
+using HighSens.Domain;
+
+namespace MVC.Controllers
+{
+    public class StockController : Controller
+    {
+        private readonly DBContext _db;
+        public StockController(DBContext db) => _db = db;
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Check(int clientId, int productId, int sectionId)
+        {
+            var stock = _db.Stocks.FirstOrDefault(s => s.ClientId == clientId && s.ProductId == productId && s.SectionId == sectionId);
+            if (stock == null)
+            {
+                ViewBag.Message = "No stock found.";
+                ViewBag.Cartons = 0;
+                ViewBag.Pallets = 0;
+            }
+            else
+            {
+                ViewBag.Message = "Stock found.";
+                ViewBag.Cartons = stock.Cartons;
+                ViewBag.Pallets = stock.Pallets;
+            }
+            return View("Index");
+        }
+    }
+}

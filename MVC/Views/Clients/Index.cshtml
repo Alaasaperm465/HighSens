@@ -1,0 +1,15 @@
+@model IEnumerable<HighSens.Domain.Client>
+@{
+    ViewData["Title"] = "Clients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Clients</h1>
+<p><a class="btn btn-primary" href="/Clients/Create">Create Client</a></p>
+<table class="table table-striped">
+    <thead><tr><th>Id</th><th>Name</th></tr></thead>
+    <tbody>
+    @foreach(var c in Model) {
+        <tr><td>@c.Id</td><td>@c.Name</td></tr>
+    }
+    </tbody>
+</table>

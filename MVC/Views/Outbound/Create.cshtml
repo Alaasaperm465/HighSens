@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Create Outbound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Create Outbound</h1>
+@if(TempData["Error"] != null) {
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if(TempData["Success"] != null) {
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+<form method="post">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Client</label>
+            <select name="clientId" class="form-select">
+                @foreach(var c in (IEnumerable<HighSens.Domain.Client>)ViewBag.Clients) {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Product</label>
+            <select name="productId" class="form-select">
+                @foreach(var p in (IEnumerable<HighSens.Domain.Product>)ViewBag.Products) {
+                    <option value="@p.Id">@p.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Section</label>
+            <select name="sectionId" class="form-select">
+                @foreach(var s in (IEnumerable<HighSens.Domain.Section>)ViewBag.Sections) {
+                    <option value="@s.Id">@s.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 mb-3"><label class="form-label">Cartons</label><input class="form-control" name="cartons" /></div>
+        <div class="col-md-3 mb-3"><label class="form-label">Pallets</label><input class="form-control" name="pallets" /></div>
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>

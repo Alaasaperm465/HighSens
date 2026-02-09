@@ -1,0 +1,17 @@
+@model HighSens.Domain.Product
+@{
+    ViewData["Title"] = "Create Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Create Product</h1>
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input class="form-control" asp-for="Name" name="Name" />
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" asp-for="IsActive" name="IsActive" />
+        <label class="form-check-label">Is Active</label>
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>

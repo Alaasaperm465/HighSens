@@ -1,0 +1,40 @@
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.csproj.AssemblyReference.cache
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.GeneratedMSBuildEditorConfig.editorconfig
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.AssemblyInfoInputs.cache
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.AssemblyInfo.cs
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.csproj.CoreCompileInputs.cache
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.sourcelink.json
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.deps.json
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.runtimeconfig.json
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.dll
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.pdb
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\Domain.dll
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\Domain.pdb
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStr.570FDCE2.Up2Date
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.dll
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\refint\InfraStructure.dll
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.pdb
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.genruntimeconfig.cache
+F:\.net\HighSens\InfraStructure\obj\Debug\net9.0\ref\InfraStructure.dll
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\Application.dll
+F:\.net\HighSens\InfraStructure\bin\Debug\net9.0\Application.pdb
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.csproj.AssemblyReference.cache
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.GeneratedMSBuildEditorConfig.editorconfig
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.AssemblyInfoInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.AssemblyInfo.cs
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.csproj.CoreCompileInputs.cache
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.sourcelink.json
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.dll
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\refint\InfraStructure.dll
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.pdb
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.deps.json
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.runtimeconfig.json
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.dll
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\InfraStructure.pdb
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\Application.dll
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\Domain.dll
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\Domain.pdb
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\bin\Debug\net9.0\Application.pdb
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStr.570FDCE2.Up2Date
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\InfraStructure.genruntimeconfig.cache
+E:\Alaa Sabar 2\Backend\HighSens\InfraStructure\obj\Debug\net9.0\ref\InfraStructure.dll
