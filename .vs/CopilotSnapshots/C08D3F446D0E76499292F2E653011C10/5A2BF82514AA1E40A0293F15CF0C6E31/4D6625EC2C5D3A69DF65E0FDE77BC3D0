@@ -1,0 +1,46 @@
+﻿using InfraStructure.Context;
+using InfraStructure.Repos;
+using Frozen_Warehouse.Application.Services;
+using Frozen_Warehouse.Application.Interfaces.IServices;
+using Frozen_Warehouse.Application.Interfaces.IRepositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace MVC
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddRazorPages();
+
+            // add DBContext
+            builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+
+            // register repositories and services
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductRepository, ProductRepositoryImpl>();
+
+            var app = builder.Build();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapRazorPages();
+
+            app.Run();
+        }
+    }
+}

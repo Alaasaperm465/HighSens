@@ -4,10 +4,13 @@ using HighSens.Domain;
 using HighSens.Application.Interfaces.IRepositories;
 using InfraStructure.Context;
 using Microsoft.EntityFrameworkCore;
+using HighSens.Domain.Interfaces;
+using System.Linq;
+using System;
 
 namespace InfraStructure.Repos
 {
-    public class ProductRepository : HighSens.Application.Interfaces.IRepositories.IProductRepository
+    public class ProductRepository : HighSens.Application.Interfaces.IRepositories.IProductRepository, HighSens.Domain.Interfaces.IProductRepository
     {
         private readonly DBContext _db;
         public ProductRepository(DBContext db) { _db = db; }
@@ -40,6 +43,42 @@ namespace InfraStructure.Repos
         public async Task<bool> ExistsAsync(int id)
         {
             return await _db.Products.AnyAsync(p => p.Id == id && p.IsActive);
+        }
+
+        // helper to allow getting by name
+        public async Task<Product?> GetByNameInternalAsync(string name)
+        {
+            return await _db.Products.FirstOrDefaultAsync(p => p.Name == name && p.IsActive);
+        }
+
+        // Implementation for Domain.Interfaces.IProductRepository
+        public async Task<Product?> GetByNameAsync(string name)
+        {
+            return await GetByNameInternalAsync(name);
+        }
+
+        public void Update(Product entity)
+        {
+            _db.Products.Update(entity);
+        }
+
+        public void Remove(Product entity)
+        {
+            _db.Products.Remove(entity);
+        }
+
+        public async Task<IEnumerable<Product>> GetDailyReportAsync()
+        {
+            var start = DateTime.UtcNow.Date;
+            var end = start.AddDays(1);
+            return await _db.Products.Where(p => EF.Property<DateTime>(p, "CreatedAt") >= start && EF.Property<DateTime>(p, "CreatedAt") < end).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetByDateRangeAsync(DateTime start, DateTime end)
+        {
+            var s = start.ToUniversalTime();
+            var e = end.ToUniversalTime();
+            return await _db.Products.Where(p => EF.Property<DateTime>(p, "CreatedAt") >= s && EF.Property<DateTime>(p, "CreatedAt") < e).ToListAsync();
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿using InfraStructure.Context;
+using InfraStructure.Repos;
+using InfraStructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using HighSens.Application.Interfaces.IServices;
+using HighSens.Application.Services;
+using HighSens.Domain.Interfaces;
+using MVC.Mapping;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container - full MVC with views
+builder.Services.AddControllersWithViews();
+
+// add DBContext
+builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(InboundProfile));
+
+// register repositories
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<HighSens.Application.Interfaces.IRepositories.IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IProductStockRepository, ProductStockRepository>();
+builder.Services.AddScoped<ISectionStockRepository, SectionStockRepository>();
+
+// register services
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISectionService, SectionService>();
+builder.Services.AddScoped<IInboundService, InboundService>();
+
+// unit of work
+builder.Services.AddScoped<HighSens.Domain.Interfaces.IUnitOfWork, UnitOfWork>();
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();

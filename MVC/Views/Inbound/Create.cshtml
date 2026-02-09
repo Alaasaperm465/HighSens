@@ -39,7 +39,14 @@
                                 <option value="">-- Select Product --</option>
                                 @foreach (var p in Model.Products)
                                 {
-                                    <option value="@p.Value" @(p.Value == Model.Details[i].ProductId.ToString() ? "selected" : "")>@p.Text</option>
+                                    if (p.Value == Model.Details[i].ProductId.ToString())
+                                    {
+                                        <option selected value="@p.Value">@p.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@p.Value">@p.Text</option>
+                                    }
                                 }
                             </select>
                             <span class="text-danger" data-valmsg-for="Details[@i].ProductId" data-valmsg-replace="true"></span>
@@ -49,7 +56,14 @@
                                 <option value="">-- Select Section --</option>
                                 @foreach (var s in Model.Sections)
                                 {
-                                    <option value="@s.Value" @(s.Value == Model.Details[i].SectionId.ToString() ? "selected" : "")>@s.Text</option>
+                                    if (s.Value == Model.Details[i].SectionId.ToString())
+                                    {
+                                        <option selected value="@s.Value">@s.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s.Value">@s.Text</option>
+                                    }
                                 }
                             </select>
                             <span class="text-danger" data-valmsg-for="Details[@i].SectionId" data-valmsg-replace="true"></span>

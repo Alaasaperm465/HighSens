@@ -3,6 +3,7 @@ using HighSens.Application.DTOs.Product;
 using HighSens.Application.Interfaces.IServices;
 using HighSens.Application.Interfaces.IRepositories;
 using HighSens.Domain;
+using System.Threading.Tasks;
 
 namespace HighSens.Application.Services
 {

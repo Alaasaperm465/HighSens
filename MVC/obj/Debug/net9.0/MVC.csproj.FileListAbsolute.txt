@@ -290,3 +290,5 @@ E:\Alaa Sabar 2\Backend\HighSens\MVC\obj\Debug\net9.0\MVC.csproj.Up2Date
 E:\Alaa Sabar 2\Backend\HighSens\MVC\obj\Debug\net9.0\MVC.genruntimeconfig.cache
 E:\Alaa Sabar 2\Backend\HighSens\MVC\obj\Debug\net9.0\ref\MVC.dll
 E:\Alaa Sabar 2\Backend\HighSens\MVC\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+E:\Alaa Sabar 2\Backend\HighSens\MVC\bin\Debug\net9.0\AutoMapper.dll
+E:\Alaa Sabar 2\Backend\HighSens\MVC\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

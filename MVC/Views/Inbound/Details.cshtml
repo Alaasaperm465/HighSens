@@ -3,40 +3,46 @@
     ViewData["Title"] = "Inbound Details";
 }
 <div class="container mt-4">
-    <h2>Inbound #@Model.Id</h2>
-    <div class="mb-3">
-        <strong>Client:</strong> @Model.ClientName<br />
-        <strong>Created:</strong> @Model.CreatedAt.ToLocalTime().ToString("g")
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Inbound #@Model.Id</h4>
+            <div class="mb-3 text-muted">
+                <div><strong>Client:</strong> @Model.ClientName</div>
+                <div><strong>Created:</strong> @Model.CreatedAt.ToLocalTime().ToString("g")</div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Section</th>
+                            <th class="text-end">Cartons</th>
+                            <th class="text-end">Pallets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var d in Model.Details)
+                        {
+                            <tr>
+                                <td>@(d.ProductName ?? d.ProductId.ToString())</td>
+                                <td>@(d.SectionName ?? d.SectionId.ToString())</td>
+                                <td class="text-end">@d.Cartons</td>
+                                <td class="text-end">@d.Pallets</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Totals</th>
+                            <th class="text-end">@Model.TotalCartons</th>
+                            <th class="text-end">@Model.TotalPallets</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <a class="btn btn-secondary" asp-action="Index">Back</a>
+        </div>
     </div>
-
-    <table class="table table-bordered">
-        <thead class="table-light">
-            <tr>
-                <th>Product</th>
-                <th>Section</th>
-                <th>Cartons</th>
-                <th>Pallets</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var d in Model.Details)
-            {
-                <tr>
-                    <td>@d.ProductId</td>
-                    <td>@d.SectionId</td>
-                    <td>@d.Cartons</td>
-                    <td>@d.Pallets</td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="2">Totals</th>
-                <th>@Model.TotalCartons</th>
-                <th>@Model.TotalPallets</th>
-            </tr>
-        </tfoot>
-    </table>
-
-    <a class="btn btn-secondary" asp-action="Index">Back</a>
 </div>

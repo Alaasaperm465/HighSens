@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using InfraStructure.Context;
 using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVC.Controllers
 {
@@ -9,9 +10,19 @@ namespace MVC.Controllers
         private readonly DBContext _db;
         public StockController(DBContext db) => _db = db;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? productId, int? sectionId)
         {
-            return View();
+            var query = _db.Stocks.AsQueryable();
+            if (productId.HasValue) query = query.Where(s => s.ProductId == productId.Value);
+            if (sectionId.HasValue) query = query.Where(s => s.SectionId == sectionId.Value);
+            var list = await query.Include(s => s.Product).Include(s => s.Section).ToListAsync();
+
+            var products = await _db.Products.AsNoTracking().ToListAsync();
+            var sections = await _db.Sections.AsNoTracking().ToListAsync();
+            ViewBag.Products = products;
+            ViewBag.Sections = sections;
+
+            return View(list);
         }
 
         [HttpPost]

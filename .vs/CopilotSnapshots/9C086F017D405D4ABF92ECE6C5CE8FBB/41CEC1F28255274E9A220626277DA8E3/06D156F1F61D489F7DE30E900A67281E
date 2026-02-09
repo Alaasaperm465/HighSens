@@ -1,0 +1,20 @@
+﻿using System.Threading.Tasks;
+using HighSens.Domain;
+using InfraStructure.Context;
+using Microsoft.EntityFrameworkCore;
+
+namespace InfraStructure.Repos
+{
+    public static class ProductRepositoryExtensions
+    {
+        public static async Task<Product?> GetByNameAsync(this IProductRepository repo, string name)
+        {
+            // Attempt to cast to concrete repo for DB access
+            if (repo is ProductRepository pr)
+            {
+                return await pr.GetByNameInternalAsync(name);
+            }
+            return null;
+        }
+    }
+}

@@ -14,7 +14,8 @@ namespace HighSens.Application.Services
         private readonly IProductRepository _productRepo;
         private readonly ISectionRepository _sectionRepo;
         private readonly IStockRepository _stockRepo;
-        private readonly DBContext _dbContext; // for direct ProductStock/SectionStock queries
+        private readonly IProductStockRepository _productStockRepo;
+        private readonly ISectionStockRepository _sectionStockRepo;
         private readonly IUnitOfWork _uow;
 
         public InboundService(
@@ -23,16 +24,18 @@ namespace HighSens.Application.Services
             IProductRepository productRepo,
             ISectionRepository sectionRepo,
             IStockRepository stockRepo,
-            IUnitOfWork uow,
-            InfraStructure.Context.DBContext dbContext)
+            IProductStockRepository productStockRepo,
+            ISectionStockRepository sectionStockRepo,
+            IUnitOfWork uow)
         {
             _inboundRepo = inboundRepo;
             _clientRepo = clientRepo;
             _productRepo = productRepo;
             _sectionRepo = sectionRepo;
             _stockRepo = stockRepo;
+            _productStockRepo = productStockRepo;
+            _sectionStockRepo = sectionStockRepo;
             _uow = uow;
-            _dbContext = dbContext;
         }
 
         public async Task<int> CreateInboundAsync(CreateInboundRequest request)
@@ -43,27 +46,19 @@ namespace HighSens.Application.Services
 
             var clientName = request.ClientName.Trim();
 
-            // Use transaction
             int inboundId = 0;
             await _uow.ExecuteInTransactionAsync(async () =>
             {
-                // find or create client
                 var client = await _clientRepo.FindByNameAsync(clientName);
                 if (client == null)
                 {
                     client = new Client { Name = clientName };
                     await _clientRepo.AddAsync(client);
-                    await _uow.SaveChangesAsync(); // ensure client.Id is generated
+                    await _uow.SaveChangesAsync();
                 }
 
-                // Create inbound with client ID
-                var inbound = new Inbound
-                {
-                    ClientId = client.Id,
-                    CreatedAt = DateTime.UtcNow
-                };
+                var inbound = new Inbound { ClientId = client.Id, CreatedAt = DateTime.UtcNow };
 
-                // Track pending stock updates in-memory to handle multiple lines referring to same key
                 var pendingStock = new Dictionary<string, Stock>();
 
                 foreach (var line in request.Lines)
@@ -73,18 +68,12 @@ namespace HighSens.Application.Services
                     if (string.IsNullOrWhiteSpace(line.SectionName)) throw new ArgumentException("SectionName is required");
                     if (line.Cartons < 0 || line.Pallets < 0) throw new ArgumentException("Cartons and pallets must be non-negative");
 
-                    var productName = line.ProductName.Trim();
-                    var sectionName = line.SectionName.Trim();
+                    var product = await _productRepo.GetByNameAsync(line.ProductName.Trim());
+                    if (product == null) throw new ArgumentException($"Product not found: {line.ProductName}");
 
-                    // resolve product
-                    var product = await _productRepo.GetByNameAsync(productName);
-                    if (product == null) throw new ArgumentException($"Product not found: {productName}");
+                    var section = await _sectionRepo.GetByNameAsync(line.SectionName.Trim());
+                    if (section == null) throw new ArgumentException($"Section not found: {line.SectionName}");
 
-                    // resolve section
-                    var section = await _sectionRepo.GetByNameAsync(sectionName);
-                    if (section == null) throw new ArgumentException($"Section not found: {sectionName}");
-
-                    // compute quantity
                     var quantity = (decimal)line.Cartons + ((decimal)line.Pallets * 100m);
 
                     var detail = new InboundDetail
@@ -98,10 +87,8 @@ namespace HighSens.Application.Services
 
                     inbound.Details.Add(detail);
 
-                    // Prepare key
                     var key = $"{product.Id}:{section.Id}";
 
-                    // Update or create Stock (per section-product)
                     if (!pendingStock.TryGetValue(key, out var stock))
                     {
                         stock = await _stockRepo.FindAsync(client.Id, product.Id, section.Id);
@@ -128,8 +115,8 @@ namespace HighSens.Application.Services
                         pendingStock[key] = stock;
                     }
 
-                    // Update ProductStock (aggregate per product)
-                    var prodStock = await _dbContext.ProductStocks.FirstOrDefaultAsync(ps => ps.ClientId == client.Id && ps.ProductId == product.Id);
+                    // ProductStock
+                    var prodStock = await _productStockRepo.FindAsync(client.Id, product.Id);
                     if (prodStock == null)
                     {
                         prodStock = new ProductStock
@@ -139,17 +126,17 @@ namespace HighSens.Application.Services
                             Cartons = line.Cartons,
                             Pallets = line.Pallets
                         };
-                        await _dbContext.ProductStocks.AddAsync(prodStock);
+                        await _productStockRepo.AddAsync(prodStock);
                     }
                     else
                     {
                         prodStock.Cartons += line.Cartons;
                         prodStock.Pallets += line.Pallets;
-                        _dbContext.ProductStocks.Update(prodStock);
+                        _productStockRepo.Update(prodStock);
                     }
 
-                    // Update SectionStock (aggregate per section)
-                    var secStock = await _dbContext.SectionStocks.FirstOrDefaultAsync(ss => ss.ClientId == client.Id && ss.SectionId == section.Id);
+                    // SectionStock
+                    var secStock = await _sectionStockRepo.FindAsync(client.Id, section.Id);
                     if (secStock == null)
                     {
                         secStock = new SectionStock
@@ -159,13 +146,13 @@ namespace HighSens.Application.Services
                             Cartons = line.Cartons,
                             Pallets = line.Pallets
                         };
-                        await _dbContext.SectionStocks.AddAsync(secStock);
+                        await _sectionStockRepo.AddAsync(secStock);
                     }
                     else
                     {
                         secStock.Cartons += line.Cartons;
                         secStock.Pallets += line.Pallets;
-                        _dbContext.SectionStocks.Update(secStock);
+                        _sectionStockRepo.Update(secStock);
                     }
                 }
 
@@ -179,7 +166,7 @@ namespace HighSens.Application.Services
 
         public Task<IEnumerable<Inbound>> GetAllInboundsAsync()
         {
-            return _inboundRepo.GetAllAsync();  
+            return _inboundRepo.GetAllAsync();
         }
 
         public Task<IEnumerable<Inbound>> GetDailyInboundReportAsync()
@@ -189,7 +176,6 @@ namespace HighSens.Application.Services
 
         public async Task<IEnumerable<Inbound>> GetInboundReportFromToAsync(DateTime startDate, DateTime endDate)
         {
-            // normalize to UTC date boundaries
             var start = startDate.Date.ToUniversalTime();
             var end = endDate.Date.AddDays(1).ToUniversalTime();
 

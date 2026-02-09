@@ -23,11 +23,14 @@ namespace MVC.Controllers
             IMapper mapper)
         {
             _inboundService = inboundService;
-            _clientService = clientService;
+            _client_service = clientService; // fix below
             _productService = productService;
             _sectionService = sectionService;
             _mapper = mapper;
         }
+
+        // fix field typo
+        private readonly HighSens.Application.Interfaces.IServices.IClientService _client_service;
 
         public async Task<IActionResult> Index()
         {
@@ -38,7 +41,7 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var clients = await _clientService.GetAllAsync();
+            var clients = await _client_service.GetAllAsync();
             var products = await _productService.GetAllAsync();
             var sections = await _sectionService.GetAllAsync();
 
@@ -60,7 +63,7 @@ namespace MVC.Controllers
             // reload selects when returning view
             async Task PopulateLookups()
             {
-                var clients = await _clientService.GetAllAsync();
+                var clients = await _client_service.GetAllAsync();
                 var products = await _productService.GetAllAsync();
                 var sections = await _sectionService.GetAllAsync();
 
@@ -75,7 +78,7 @@ namespace MVC.Controllers
                 return View(vm);
             }
 
-            var clientDto = await _clientService.GetByIdAsync(vm.ClientId);
+            var clientDto = await _client_service.GetByIdAsync(vm.ClientId);
             if (clientDto == null)
             {
                 ModelState.AddModelError(nameof(vm.ClientId), "Selected client does not exist");

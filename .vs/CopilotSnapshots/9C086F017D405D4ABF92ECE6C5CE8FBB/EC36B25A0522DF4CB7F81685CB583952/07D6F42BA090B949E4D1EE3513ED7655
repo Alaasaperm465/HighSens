@@ -1,0 +1,79 @@
+﻿using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace InfraStructure.Context
+{
+    public class DBContext : DbContext
+    {
+        public DBContext(DbContextOptions<DBContext> options) : base(options)
+        {
+        }
+        public DbSet<Client> Clients { get; set; } = null!;
+        public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<Section> Sections { get; set; } = null!;
+        public DbSet<Stock> Stocks { get; set; } = null!;
+        public DbSet<Inbound> Inbounds { get; set; } = null!;
+        public DbSet<InboundDetail> InboundDetails { get; set; } = null!;
+        public DbSet<Outbound> Outbounds { get; set; } = null!;
+        public DbSet<OutboundDetail> OutboundDetails { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Client>().HasIndex(c => c.Name).IsUnique();
+
+            modelBuilder.Entity<Product>().HasQueryFilter(p => p.IsActive);
+
+            modelBuilder.Entity<Stock>().HasIndex(s => new { s.ClientId, s.ProductId, s.SectionId }).IsUnique();
+
+            // Configure relationships from Stock side to avoid requiring navigation collections on Client/Product/Section
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.Client)
+                .WithMany()
+                .HasForeignKey(s => s.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.Product)
+                .WithMany(p => p.Stocks)
+                .HasForeignKey(s => s.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.Section)
+                .WithMany()
+                .HasForeignKey(s => s.SectionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // relationships for inbound/outbound details
+            modelBuilder.Entity<InboundDetail>().HasOne(d => d.Inbound).WithMany(i => i.Details).HasForeignKey(d => d.InboundId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<OutboundDetail>().HasOne(d => d.Outbound).WithMany(i => i.Details).HasForeignKey(d => d.OutboundId).OnDelete(DeleteBehavior.Cascade);
+
+            // Seed sections
+            var sections = new[]
+            {
+                new Section { Id = 1, Name = "S1" },
+                new Section { Id = 2, Name = "S2" },
+            };
+            modelBuilder.Entity<Section>().HasData(sections);
+
+            // Seed users with integer ids and plain text passwords (testing only)
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 1, Username = "admin", Password = "123456", Role = HighSens.Domain.Roles.Admin, CreatedAt = DateTime.UtcNow },
+                new User { Id = 2, Username = "storekeeper", Password = "123456", Role = HighSens.Domain.Roles.StoreKeeper, CreatedAt = DateTime.UtcNow }
+            );
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
+    }
+}

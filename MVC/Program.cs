@@ -2,6 +2,11 @@ using InfraStructure.Context;
 using InfraStructure.Repos;
 using InfraStructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using HighSens.Application.Interfaces.IServices;
+using HighSens.Application.Services;
+using HighSens.Domain.Interfaces;
+using MVC.Mapping;
+using HighSens.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +16,29 @@ builder.Services.AddControllersWithViews();
 // add DBContext
 builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
 
-// register repositories and services
-builder.Services.AddScoped(typeof(HighSens.Application.Interfaces.IServices.IProductService), typeof(HighSens.Application.Services.ProductService));
-builder.Services.AddScoped(typeof(HighSens.Application.Interfaces.IRepositories.IProductRepository), typeof(InfraStructure.Repos.ProductRepository));
-builder.Services.AddScoped(typeof(HighSens.Domain.Interfaces.IUnitOfWork), typeof(InfraStructure.UnitOfWork.UnitOfWork));
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(InboundProfile));
+
+// register repositories
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<HighSens.Application.Interfaces.IRepositories.IProductRepository, ProductRepository>();
+// register domain product repository (some services depend on the domain interface)
+builder.Services.AddScoped<HighSens.Domain.Interfaces.IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<IProductStockRepository, ProductStockRepository>();
+builder.Services.AddScoped<ISectionStockRepository, SectionStockRepository>();
+// register generic inbound repository used by InboundService
+builder.Services.AddScoped<HighSens.Domain.Interfaces.IRepository<HighSens.Domain.Inbound>, InboundRepository>();
+
+// register services
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISectionService, SectionService>();
+builder.Services.AddScoped<IInboundService, InboundService>();
+
+// unit of work
+builder.Services.AddScoped<HighSens.Domain.Interfaces.IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
