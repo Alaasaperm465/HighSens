@@ -14,7 +14,8 @@
           "Domain": "1.0.0",
           "InfraStructure": "1.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.0",
-          "Microsoft.EntityFrameworkCore.InMemory": "9.0.0"
+          "Microsoft.EntityFrameworkCore.InMemory": "9.0.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0"
         },
         "runtime": {
           "MVC.dll": {}

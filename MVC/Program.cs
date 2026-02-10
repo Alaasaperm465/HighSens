@@ -2,6 +2,7 @@ using InfraStructure.Context;
 using InfraStructure.Repos;
 using InfraStructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using HighSens.Application.Interfaces.IServices;
 using HighSens.Application.Services;
 using HighSens.Domain.Interfaces;
@@ -13,8 +14,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container - full MVC with views
 builder.Services.AddControllersWithViews();
 
-// add DBContext
-builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB"));
+// Configure DbContext: prefer SQL Server using configuration, fallback to in-memory for local/dev
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var migrationsAssembly = typeof(DBContext).Assembly.GetName().Name;
+if (!string.IsNullOrWhiteSpace(connectionString))
+{
+    builder.Services.AddDbContext<DBContext>(opt =>
+        opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly))
+           .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
+}
+else
+{
+    builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB")
+        .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
+}
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(InboundProfile));

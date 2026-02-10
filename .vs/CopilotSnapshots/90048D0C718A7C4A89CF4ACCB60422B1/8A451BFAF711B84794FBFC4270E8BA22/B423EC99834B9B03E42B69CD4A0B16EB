@@ -1,0 +1,80 @@
+﻿using System;
+using System.IO;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+
+namespace InfraStructure.Context
+{
+    /// <summary>
+    /// Design-time factory for EF Core tools. Reads connection string from appsettings.json
+    /// (searches current directory and a few parent directories) and configures the provider.
+    /// </summary>
+    public class DBContextFactory : IDesignTimeDbContextFactory<DBContext>
+    {
+        public DBContext CreateDbContext(string[] args)
+        {
+            // Start from current directory (tools normally run from project or solution folder)
+            var basePath = Directory.GetCurrentDirectory();
+
+            var connectionString = FindConnectionString(basePath);
+
+            var optionsBuilder = new DbContextOptionsBuilder<DBContext>();
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                // If no connection string is found, fall back to an in-memory provider so tools can still function
+                optionsBuilder.UseInMemoryDatabase("DesignTimeDB");
+            }
+            else
+            {
+                // Use SQL Server for design-time migrations; ensure your Infrastructure project has the
+                // Microsoft.EntityFrameworkCore.SqlServer package referenced.
+                optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly(typeof(DBContext).Assembly.FullName));
+            }
+
+            return new DBContext(optionsBuilder.Options);
+        }
+
+        private static string? FindConnectionString(string startDirectory)
+        {
+            var dir = new DirectoryInfo(startDirectory);
+
+            // Try the current directory and ascend up to 6 levels to find appsettings.json
+            for (int i = 0; i < 6 && dir != null; i++)
+            {
+                foreach (var fileName in new[] { "appsettings.Development.json", "appsettings.json" })
+                {
+                    var filePath = Path.Combine(dir.FullName, fileName);
+                    if (!File.Exists(filePath)) continue;
+
+                    try
+                    {
+                        using var stream = File.OpenRead(filePath);
+                        using var doc = JsonDocument.Parse(stream);
+                        if (doc.RootElement.TryGetProperty("ConnectionStrings", out var cs) && cs.ValueKind == JsonValueKind.Object)
+                        {
+                            if (cs.TryGetProperty("DefaultConnection", out var val) && val.ValueKind == JsonValueKind.String)
+                            {
+                                var s = val.GetString();
+                                if (!string.IsNullOrWhiteSpace(s)) return s;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // ignore malformed files and continue searching upwards
+                    }
+                }
+
+                dir = dir.Parent;
+            }
+
+            // Final fallback: environment variable
+            var env = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+            if (!string.IsNullOrWhiteSpace(env)) return env;
+
+            return null;
+        }
+    }
+}
