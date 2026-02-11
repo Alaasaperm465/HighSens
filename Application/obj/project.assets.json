@@ -27,23 +27,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Shoman\\.nuget\\packages\\": {},
+    "C:\\Users\\louts\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Application.csproj",
+      "projectUniqueName": "F:\\.net\\HighSense\\HighSens\\Application\\Application.csproj",
       "projectName": "Application",
-      "projectPath": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Application.csproj",
-      "packagesPath": "C:\\Users\\Shoman\\.nuget\\packages\\",
-      "outputPath": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\obj\\",
+      "projectPath": "F:\\.net\\HighSense\\HighSens\\Application\\Application.csproj",
+      "packagesPath": "C:\\Users\\louts\\.nuget\\packages\\",
+      "outputPath": "F:\\.net\\HighSense\\HighSens\\Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Shoman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\louts\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -52,15 +52,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "E:\\Alaa Sabar 2\\Backend\\HighSens\\Domain\\Domain.csproj": {
-              "projectPath": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Domain\\Domain.csproj"
+            "F:\\.net\\HighSense\\HighSens\\Domain\\Domain.csproj": {
+              "projectPath": "F:\\.net\\HighSense\\HighSens\\Domain\\Domain.csproj"
             }
           }
         }
@@ -96,7 +95,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
