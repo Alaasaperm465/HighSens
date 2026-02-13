@@ -22,3 +22,15 @@ E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.dll
 E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\refint\Domain.dll
 E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\Domain.pdb
 E:\Alaa Sabar 2\Backend\HighSens\Domain\obj\Debug\net9.0\ref\Domain.dll
+F:\.net\HighSense\HighSens\Domain\bin\Debug\net9.0\Domain.deps.json
+F:\.net\HighSense\HighSens\Domain\bin\Debug\net9.0\Domain.dll
+F:\.net\HighSense\HighSens\Domain\bin\Debug\net9.0\Domain.pdb
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfoInputs.cache
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.AssemblyInfo.cs
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.csproj.CoreCompileInputs.cache
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.dll
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\refint\Domain.dll
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\Domain.pdb
+F:\.net\HighSense\HighSens\Domain\obj\Debug\net9.0\ref\Domain.dll
