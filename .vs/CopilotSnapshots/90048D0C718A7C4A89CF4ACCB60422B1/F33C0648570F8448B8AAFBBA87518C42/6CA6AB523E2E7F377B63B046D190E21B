@@ -1,0 +1,90 @@
+﻿/* site-responsive.css - custom responsive rules for WMS */
+:root{
+    --sidebar-width: 250px;
+}
+
+/* Ensure page doesn't overflow horizontally */
+html,body{overflow-x:hidden}
+
+/* Sidebar */
+.sidebar{
+    width:var(--sidebar-width);
+    min-height:100vh;
+    position:relative;
+}
+
+/* When collapsed, reduce width */
+.sidebar.collapsed{
+    width:72px;
+}
+
+.sidebar .nav-link{color:#e9ecef}
+.sidebar .nav-link:hover{background:rgba(255,255,255,0.03)}
+
+/* main area should account for sidebar width on md+ */
+@media (min-width:768px){
+    #main-area{margin-left:0}
+}
+
+/* Offcanvas mobile nav: ensure full height scroll */
+.offcanvas-body nav{min-height:100vh}
+
+/* Tables */
+.table-responsive{overflow-x:auto}
+@media (max-width:576px){
+    .table td,.table th{font-size:.85rem}
+}
+
+/* Cards grid */
+.card-equal{height:100%}
+
+/* Dashboard layout */
+.dashboard-row{gap:1rem}
+
+/* Small adjustments */
+img{max-width:100%;height:auto}
+
+/* Make buttons full width on very small screens */
+@media (max-width:576px){
+    .btn{width:100%;}
+}
+
+/* Forms spacing */
+.form-row-gap{gap:.75rem}
+
+/* Utility to hide label on small if needed */
+@media (max-width:576px){
+    .label-small-hide{display:none}
+}
+
+/* Dashboard action buttons styling */
+.dashboard-actions .btn{
+    padding:.6rem 1rem;
+    border-radius: 999px; /* pill */
+    font-weight:600;
+}
+.dashboard-actions .btn .bi{font-size:1.05rem}
+
+/* Elevated primary look */
+.dashboard-actions .btn-primary{
+    box-shadow: 0 6px 18px rgba(13,110,253,0.12);
+}
+.dashboard-actions .btn-outline-primary{
+    box-shadow: 0 4px 12px rgba(13,110,253,0.06);
+}
+.dashboard-actions .btn-outline-success{
+    box-shadow: 0 4px 12px rgba(25,135,84,0.06);
+    color: #198754;
+    border-color: #198754;
+}
+
+/* On very small screens make actions stacked and slightly larger */
+@media (max-width:576px){
+    .dashboard-actions{gap:.6rem}
+    .dashboard-actions .btn{padding:.9rem 1rem;font-size:1rem}
+}
+
+/* Card padding adjustments on small screens */
+@media (max-width:576px){
+    .card .card-body{padding:.85rem}
+}

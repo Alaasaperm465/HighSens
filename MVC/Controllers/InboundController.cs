@@ -23,14 +23,11 @@ namespace MVC.Controllers
             IMapper mapper)
         {
             _inboundService = inboundService;
-            _client_service = clientService; // fix below
+            _clientService = clientService;
             _productService = productService;
             _sectionService = sectionService;
             _mapper = mapper;
         }
-
-        // fix field typo
-        private readonly HighSens.Application.Interfaces.IServices.IClientService _client_service;
 
         public async Task<IActionResult> Index()
         {
@@ -41,7 +38,7 @@ namespace MVC.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var clients = await _client_service.GetAllAsync();
+            var clients = await _clientService.GetAllAsync();
             var products = await _productService.GetAllAsync();
             var sections = await _sectionService.GetAllAsync();
 
@@ -60,10 +57,10 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(InboundCreateVM vm)
         {
-            // reload selects when returning view
+            // existing server-side non-AJAX handling
             async Task PopulateLookups()
             {
-                var clients = await _client_service.GetAllAsync();
+                var clients = await _clientService.GetAllAsync();
                 var products = await _productService.GetAllAsync();
                 var sections = await _sectionService.GetAllAsync();
 
@@ -78,7 +75,7 @@ namespace MVC.Controllers
                 return View(vm);
             }
 
-            var clientDto = await _client_service.GetByIdAsync(vm.ClientId);
+            var clientDto = await _clientService.GetByIdAsync(vm.ClientId);
             if (clientDto == null)
             {
                 ModelState.AddModelError(nameof(vm.ClientId), "Selected client does not exist");
@@ -141,6 +138,29 @@ namespace MVC.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
                 await PopulateLookups();
                 return View(vm);
+            }
+        }
+
+        // New AJAX endpoint to handle JSON POST and return JSON result
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Inbound/CreateAjax")]
+        public async Task<IActionResult> CreateAjax([FromBody] CreateInboundRequest request)
+        {
+            if (request == null) return BadRequest(new { success = false, error = "Request body is required" });
+
+            try
+            {
+                var id = await _inboundService.CreateInboundAsync(request);
+                return Ok(new { success = true, id = id, client = request.ClientName });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { success = false, error = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { success = false, error = "Server error" });
             }
         }
 

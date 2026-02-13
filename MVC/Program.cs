@@ -2,7 +2,9 @@ using InfraStructure.Context;
 using InfraStructure.Repos;
 using InfraStructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using HighSens.Application.Interfaces.IServices;
 using HighSens.Application.Services;
 using HighSens.Domain.Interfaces;
@@ -12,7 +14,26 @@ using HighSens.Domain;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container - full MVC with views
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Add global authorization policy (require authenticated users by default)
+    var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
+// Configure Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();
 
 // Configure DbContext: prefer SQL Server using configuration, fallback to in-memory for local/dev
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -21,12 +42,12 @@ if (!string.IsNullOrWhiteSpace(connectionString))
 {
     builder.Services.AddDbContext<DBContext>(opt =>
         opt.UseSqlServer(connectionString, b => b.MigrationsAssembly(migrationsAssembly))
-           .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
+           .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 }
 else
 {
     builder.Services.AddDbContext<DBContext>(opt => opt.UseInMemoryDatabase("InMemDB")
-        .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
+        .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 }
 
 // AutoMapper
@@ -55,6 +76,15 @@ builder.Services.AddScoped<HighSens.Domain.Interfaces.IUnitOfWork, UnitOfWork>()
 
 var app = builder.Build();
 
+// Ensure authentication middleware is used before authorization
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -62,11 +92,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

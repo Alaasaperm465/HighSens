@@ -1,0 +1,203 @@
+// site.js - small helpers for sidebar behavior and inbound AJAX
+(function(){
+    document.addEventListener('DOMContentLoaded', function(){
+        const collapseBtn = document.getElementById('sidebarCollapse');
+        const sidebar = document.getElementById('site-sidebar');
+        const collapseIcon = document.getElementById('sidebarCollapseIcon');
+
+        if (collapseBtn && sidebar){
+            collapseBtn.addEventListener('click', function(){
+                sidebar.classList.toggle('collapsed');
+                // toggle icon
+                if (sidebar.classList.contains('collapsed')){
+                    collapseIcon.classList.remove('bi-chevron-left');
+                    collapseIcon.classList.add('bi-chevron-right');
+                } else {
+                    collapseIcon.classList.remove('bi-chevron-right');
+                    collapseIcon.classList.add('bi-chevron-left');
+                }
+            });
+        }
+
+        // close offcanvas when clicking a link (mobile)
+        document.querySelectorAll('.mobile-nav-link').forEach(function(el){
+            el.addEventListener('click', function(){
+                const off = document.getElementById('mobileSidebar');
+                if (off){
+                    const bs = bootstrap.Offcanvas.getInstance(off);
+                    if (bs) bs.hide();
+                }
+            });
+        });
+
+        // Inbound AJAX form handling
+        const inboundForm = document.getElementById('inboundForm');
+        if (inboundForm){
+            inboundForm.addEventListener('submit', function(e){
+                // prevent normal submit for ajax
+                e.preventDefault();
+                handleInboundSubmit(inboundForm);
+            });
+        }
+    });
+
+    // create toast and show (top-right). message string, type: 'success'|'danger'
+    function showToast(message, type = 'success'){
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toastEl = document.createElement('div');
+        toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+        toastEl.setAttribute('role','alert');
+        toastEl.setAttribute('aria-live','assertive');
+        toastEl.setAttribute('aria-atomic','true');
+
+        toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${escapeHtml(message)}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+
+        container.appendChild(toastEl);
+
+        const bsToast = new bootstrap.Toast(toastEl, { delay: 3000, autohide: true });
+        bsToast.show();
+
+        // cleanup after hidden
+        toastEl.addEventListener('hidden.bs.toast', function(){
+            toastEl.remove();
+        });
+    }
+
+    // Basic HTML escape to avoid injection
+    function escapeHtml(str){
+        return String(str).replace(/[&<>"]+/g, function(s){
+            return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]);
+        });
+    }
+
+    // Collect form data and post JSON to server, then append row and reset form
+    async function handleInboundSubmit(form){
+        try{
+            const url = form.getAttribute('action') || '/Inbound/CreateAjax';
+
+            // build request body from current form (Details rows must be mapped)
+            const body = buildInboundPayload(form);
+
+            // get antiforgery token from form
+            const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+            const token = tokenInput ? tokenInput.value : null;
+
+            const headers = { 'Content-Type':'application/json' };
+            if (token) headers['RequestVerificationToken'] = token;
+
+            const resp = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+
+            if (!resp.ok){
+                const err = await resp.json().catch(()=>({ error: 'Server error' }));
+                showToast(err.error || 'Save failed', 'danger');
+                return;
+            }
+
+            const data = await resp.json();
+            if (data && data.success){
+                // append row to table on Index page if present
+                appendInboundRow(document, { id: data.id, client: data.client, createdAt: new Date().toISOString(), lines: body.Lines.length });
+
+                showToast('Inbound saved successfully', 'success');
+
+                resetInboundForm(form);
+
+                // focus first field
+                const first = form.querySelector('select, input, textarea');
+                if (first) first.focus();
+            } else {
+                showToast(data.error || 'Save failed', 'danger');
+            }
+        }catch(ex){
+            console.error(ex);
+            showToast('Unexpected error', 'danger');
+        }
+    }
+
+    function buildInboundPayload(form){
+        const payload = { ClientName: null, Lines: [] };
+
+        // get client name by selected option text
+        const clientSelect = form.querySelector('select[name="ClientId"]');
+        if (clientSelect){
+            const opt = clientSelect.options[clientSelect.selectedIndex];
+            payload.ClientName = opt ? opt.text : null;
+        }
+
+        // collect lines
+        const rows = form.querySelectorAll('#linesTable tbody tr');
+        rows.forEach(row => {
+            const prodSel = row.querySelector('select[name$=".ProductId"]');
+            const secSel = row.querySelector('select[name$=".SectionId"]');
+            const cartons = row.querySelector('input[name$=".Cartons"]');
+            const pallets = row.querySelector('input[name$=".Pallets"]');
+
+            const productName = prodSel ? (prodSel.options[prodSel.selectedIndex]?.text || '') : '';
+            const sectionName = secSel ? (secSel.options[secSel.selectedIndex]?.text || '') : '';
+            const c = cartons ? parseInt(cartons.value||0) : 0;
+            const p = pallets ? parseInt(pallets.value||0) : 0;
+
+            payload.Lines.push({ ProductName: productName, SectionName: sectionName, Cartons: c, Pallets: p });
+        });
+
+        return payload;
+    }
+
+    // Append a new inbound row to any #inboundsTable (if present)
+    function appendInboundRow(doc, item){
+        try{
+            const table = doc.querySelector('#inboundsTable');
+            if (!table) return;
+
+            const tbody = table.querySelector('tbody') || table;
+            const tr = doc.createElement('tr');
+            tr.innerHTML = `
+                <td>${escapeHtml(String(item.id))}</td>
+                <td>${escapeHtml(String(item.client))}</td>
+                <td class="d-none d-sm-table-cell">${new Date(item.createdAt).toLocaleString()}</td>
+                <td>${escapeHtml(String(item.lines))}</td>
+                <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="/Inbound/Details/${item.id}">Details</a></td>
+            `;
+            tbody.prepend(tr);
+        }catch(e){
+            console.error('appendInboundRow error', e);
+        }
+    }
+
+    function resetInboundForm(form){
+        // clear selects and inputs
+        form.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+        form.querySelectorAll('input[type="number"]').forEach(i => i.value = 0);
+
+        // remove additional detail rows leaving one
+        const tbody = form.querySelector('#linesTable tbody');
+        if (tbody){
+            while (tbody.children.length > 1) tbody.removeChild(tbody.lastChild);
+
+            // reset first row inputs
+            const first = tbody.children[0];
+            if (first){
+                first.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                first.querySelectorAll('input[type="number"]').forEach(i => i.value = 0);
+            }
+        }
+
+        // reset validation messages (unobtrusive)
+        form.querySelectorAll('.text-danger').forEach(el => el.innerText = '');
+
+        // reset native validation state
+        form.reset();
+    }
+
+})();

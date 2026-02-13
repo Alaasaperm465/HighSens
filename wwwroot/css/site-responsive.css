@@ -1,0 +1,167 @@
+/* site-responsive.css - modern responsive theme for HighSens WMS */
+:root{
+    --hs-primary: #0d6efd;
+    --hs-success: #198754;
+    --hs-muted: #6c757d;
+    --bg-soft: #f7fbff;
+    --card-bg: #fff;
+    --glass-bg: rgba(255,255,255,0.7);
+    --sidebar-width: 250px;
+    --max-width: 1200px;
+}
+
+/* Base reset */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0;background:var(--bg-soft);color:#222;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+
+.container-fluid{max-width:var(--max-width);margin-left:auto;margin-right:auto}
+
+/* Ensure page doesn't overflow horizontally */
+html,body{overflow-x:hidden}
+
+/* Typography */
+h1,h2,h3,h4{font-weight:600;color:#0b2545}
+h2{font-size:1.25rem}
+.small,small{font-size:0.9rem}
+
+/* Navbar (header) */
+header.bg-white.shadow-sm{position:sticky;top:0;z-index:1040;background:var(--glass-bg);backdrop-filter:blur(6px);}
+header .btn{border-radius:.65rem}
+
+/* Sidebar (kept for larger screens) */
+.sidebar{width:var(--sidebar-width);min-height:100vh;background:#0b2545;color:#fff}
+.sidebar .nav-link{color:rgba(255,255,255,0.9)}
+.sidebar .nav-link:hover{background:rgba(255,255,255,0.03)}
+.sidebar .nav-link.active{background:rgba(255,255,255,0.06);font-weight:600;color:#fff}
+
+/* Sidebar */
+.sidebar{
+    width:var(--sidebar-width);
+    min-height:100vh;
+    position:relative;
+}
+
+/* When collapsed, reduce width */
+.sidebar.collapsed{
+    width:72px;
+}
+
+/* Main area */
+#main-area{min-height:100vh}
+main.container-fluid{padding-top:1rem;padding-bottom:2.5rem}
+
+/* Tables */
+.table{border-collapse:separate;border-spacing:0}
+.table thead th{border-bottom:1px solid rgba(0,0,0,0.06);font-weight:700}
+.table tbody tr:hover{background:rgba(13,110,253,0.03)}
+.table td,.table th{vertical-align:middle}
+.table-responsive{overflow:auto}
+
+/* Cards */
+.card{border:0;border-radius:12px;background:var(--card-bg)}
+.card.shadow-sm{box-shadow:0 6px 20px rgba(18,38,63,0.06)}
+.card .card-body{padding:1rem}
+
+/* Make buttons full width on very small screens */
+@media (max-width:576px){
+    .btn{width:100%;}
+}
+
+/* Forms spacing */
+.form-row-gap{gap:.75rem}
+
+/* Utility to hide label on small if needed */
+@media (max-width:576px){
+    .label-small-hide{display:none}
+}
+
+/* Dashboard action buttons styling */
+.dashboard-actions .btn{
+    padding:.6rem 1rem;
+    border-radius: 999px; /* pill */
+    font-weight:600;
+}
+.dashboard-actions .btn .bi{font-size:1.05rem}
+
+/* Elevated primary look */
+.dashboard-actions .btn-primary{
+    box-shadow: 0 6px 18px rgba(13,110,253,0.12);
+}
+.dashboard-actions .btn-outline-primary{
+    box-shadow: 0 4px 12px rgba(13,110,253,0.06);
+}
+.dashboard-actions .btn-outline-success{
+    box-shadow: 0 4px 12px rgba(25,135,84,0.06);
+    color: #198754;
+    border-color: #198754;
+}
+
+/* Dashboard action group */
+.dashboard-actions{display:flex;flex-wrap:wrap;gap:.5rem}
+.dashboard-actions .dashboard-btn{padding:.56rem 1rem;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:.5rem}
+
+/* Equalize dashboard action buttons sizing */
+.action-group .dashboard-btn,
+.dashboard-actions .dashboard-btn{
+    /* prefer consistent width on larger screens */
+    flex: 0 0 220px; /* fixed base width for parity */
+    max-width: 260px;
+    min-width: 180px;
+    justify-content: flex-start; /* align icon + text */
+}
+
+/* reserve consistent icon width */
+.dashboard-actions .dashboard-btn .bi,
+.action-group .dashboard-btn .bi{
+    width: 20px; /* reserve icon space */
+    text-align: center;
+    font-size: 1.05rem;
+}
+
+/* On small screens use full width stacked layout */
+@media (max-width:576px){
+    .action-group .dashboard-btn,
+    .dashboard-actions .dashboard-btn{
+        flex: 1 1 100%;
+        max-width: none;
+        min-width: 0;
+        width: 100%;
+        justify-content: center; /* center label on mobile */
+    }
+}
+
+/* Small devices adjustments */
+@media (max-width:576px){
+    h2{font-size:1.1rem}
+    .card .card-body{padding:.85rem}
+    .dashboard-actions{flex-direction:column}
+    .dashboard-actions .dashboard-btn{width:100%;justify-content:center}
+}
+
+/* mobile action bar buttons */
+.mobile-action-bar .action-btn{
+    display:flex;align-items:center;justify-content:center;gap:.6rem;
+    min-height:52px;padding:.6rem .75rem;border-radius:12px;font-weight:600;
+}
+
+/* primary emphasis */
+.mobile-action-bar .primary{background:var(--hs-primary);color:white}
+.mobile-action-bar .success{background:var(--hs-success);color:white}
+.mobile-action-bar .outline{background:transparent;border:1px solid rgba(13,110,253,0.12);color:var(--hs-primary)}
+
+/* show only on small devices */
+@media (max-width:768px){
+    .mobile-action-bar{display:block}
+    main.container-fluid{padding-bottom:120px}
+}
+
+/* Footer */
+footer{opacity:.95}
+
+/* Accessibility focus outlines */
+:focus{outline:2px solid rgba(13,110,253,0.12);outline-offset:2px}
+
+/* Small tweaks for high contrast */
+.badge{border-radius:.5rem}
+
+/* End of site-responsive.css */

@@ -4,6 +4,9 @@ namespace MVC.ViewModels.Inbound
 {
     public class InboundDetailVM
     {
+        public int Id { get; set; }
+        public int InboundId { get; set; }
+
         [Required]
         [Display(Name = "Product")]
         public int ProductId { get; set; }
@@ -21,5 +24,8 @@ namespace MVC.ViewModels.Inbound
 
         [Range(0, int.MaxValue)]
         public int Pallets { get; set; }
+
+        [Range(0, double.MaxValue)]
+        public decimal Quantity { get; set; }
     }
 }

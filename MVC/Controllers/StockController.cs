@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using InfraStructure.Context;
 using HighSens.Domain;
 using Microsoft.EntityFrameworkCore;
+using MVC.ViewModels.Stock;
 
 namespace MVC.Controllers
 {
@@ -10,19 +11,40 @@ namespace MVC.Controllers
         private readonly DBContext _db;
         public StockController(DBContext db) => _db = db;
 
-        public async Task<IActionResult> Index(int? productId, int? sectionId)
+        public async Task<IActionResult> Index(int? clientId)
         {
-            var query = _db.Stocks.AsQueryable();
-            if (productId.HasValue) query = query.Where(s => s.ProductId == productId.Value);
-            if (sectionId.HasValue) query = query.Where(s => s.SectionId == sectionId.Value);
-            var list = await query.Include(s => s.Product).Include(s => s.Section).ToListAsync();
-
+            var clients = await _db.Clients.AsNoTracking().ToListAsync();
             var products = await _db.Products.AsNoTracking().ToListAsync();
             var sections = await _db.Sections.AsNoTracking().ToListAsync();
-            ViewBag.Products = products;
-            ViewBag.Sections = sections;
 
-            return View(list);
+            var query = _db.Stocks.AsQueryable();
+            if (clientId.HasValue) query = query.Where(s => s.ClientId == clientId.Value);
+
+            var stockList = await query
+                .Include(s => s.Client)
+                .Include(s => s.Product)
+                .Include(s => s.Section)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var vm = new StockIndexVM
+            {
+                Clients = clients.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(c.Name, c.Id.ToString())).ToList(),
+                SelectedClientId = clientId,
+                Stocks = stockList.Select(s => new StockRowVM
+                {
+                    ClientId = s.ClientId,
+                    ClientName = s.Client?.Name ?? string.Empty,
+                    ProductId = s.ProductId,
+                    ProductName = s.Product?.Name ?? string.Empty,
+                    SectionId = s.SectionId,
+                    SectionName = s.Section?.Name ?? string.Empty,
+                    Cartons = s.Cartons,
+                    Pallets = s.Pallets
+                }).ToList()
+            };
+
+            return View(vm);
         }
 
         [HttpPost]

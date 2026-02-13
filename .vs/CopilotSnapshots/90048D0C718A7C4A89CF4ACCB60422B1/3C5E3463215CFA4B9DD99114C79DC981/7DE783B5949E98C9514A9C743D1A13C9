@@ -1,0 +1,33 @@
+﻿// site.js - small helpers for sidebar behavior
+(function(){
+    document.addEventListener('DOMContentLoaded', function(){
+        const collapseBtn = document.getElementById('sidebarCollapse');
+        const sidebar = document.getElementById('site-sidebar');
+        const collapseIcon = document.getElementById('sidebarCollapseIcon');
+
+        if (collapseBtn && sidebar){
+            collapseBtn.addEventListener('click', function(){
+                sidebar.classList.toggle('collapsed');
+                // toggle icon
+                if (sidebar.classList.contains('collapsed')){
+                    collapseIcon.classList.remove('bi-chevron-left');
+                    collapseIcon.classList.add('bi-chevron-right');
+                } else {
+                    collapseIcon.classList.remove('bi-chevron-right');
+                    collapseIcon.classList.add('bi-chevron-left');
+                }
+            });
+        }
+
+        // close offcanvas when clicking a link (mobile)
+        document.querySelectorAll('.mobile-nav-link').forEach(function(el){
+            el.addEventListener('click', function(){
+                const off = document.getElementById('mobileSidebar');
+                if (off){
+                    const bs = bootstrap.Offcanvas.getInstance(off);
+                    if (bs) bs.hide();
+                }
+            });
+        });
+    });
+})();

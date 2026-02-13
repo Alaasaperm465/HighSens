@@ -2,7 +2,6 @@ using HighSens.Domain.Interfaces;
 using HighSens.Application.DTOs.Outbound;
 using HighSens.Application.Interfaces.IServices;
 using HighSens.Domain;
-//using HighSens.Domain.Entities;
 
 namespace Frozen_Warehouse.Application.Services
 {
@@ -21,48 +20,67 @@ namespace Frozen_Warehouse.Application.Services
 
         public async Task<int> CreateOutboundAsync(CreateOutboundRequest request)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
             if (request.Lines == null || request.Lines.Count == 0)
                 throw new ArgumentException("Outbound must contain at least one line");
 
-            var outbound = new Outbound
-            {
-                //ClientId = request.ClientId,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            // Validate all lines first to ensure atomicity
+            // Validate inputs
             foreach (var line in request.Lines)
             {
                 if (line.Cartons < 0 || line.Pallets < 0) throw new ArgumentException("Cartons and pallets must be non-negative");
-                var stock = await _stockRepo.FindAsync(request.ClientId, line.ProductId, line.SectionId);
-                if (stock == null || stock.Cartons < line.Cartons || stock.Pallets < line.Pallets)
-                {
-                    throw new InvalidOperationException($"Insufficient stock for product {line.ProductId} in section {line.SectionId}");
-                }
             }
 
-            // All validations passed, perform updates
-            foreach (var line in request.Lines)
+            var outbound = new Outbound
             {
-                var detail = new OutboundDetail
+                ClientId = request.ClientId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            // Execute validation and mutation inside a transaction
+            await _uow.ExecuteInTransactionAsync(async () =>
+            {
+                // Validate all lines first
+                foreach (var line in request.Lines)
                 {
-                    //OutboundId = outbound.Id,
-                    ProductId = line.ProductId,
-                    SectionId = line.SectionId,
-                    Cartons = line.Cartons,
-                    Pallets = line.Pallets
-                };
-                outbound.Details.Add(detail);
+                    var stock = await _stockRepo.FindAsync(request.ClientId, line.ProductId, line.SectionId);
+                    if (stock == null)
+                    {
+                        throw new InvalidOperationException($"Stock not found for product {line.ProductId} in section {line.SectionId} for client {request.ClientId}");
+                    }
 
-                var stock = await _stockRepo.FindAsync(request.ClientId, line.ProductId, line.SectionId);
-                stock!.Cartons -= line.Cartons;
-                stock!.Pallets -= line.Pallets;
-                if (stock.Cartons < 0 || stock.Pallets < 0) throw new InvalidOperationException("Stock cannot be negative");
-                _stockRepo.Update(stock);
-            }
+                    if (stock.Cartons < line.Cartons || stock.Pallets < line.Pallets)
+                    {
+                        throw new InvalidOperationException($"Insufficient stock for product {line.ProductId} in section {line.SectionId}");
+                    }
+                }
 
-            await _outboundRepo.AddAsync(outbound);
-            await _uow.SaveChangesAsync();
+                // All validations passed, perform updates and save details
+                foreach (var line in request.Lines)
+                {
+                    var detail = new OutboundDetail
+                    {
+                        ProductId = line.ProductId,
+                        SectionId = line.SectionId,
+                        Cartons = line.Cartons,
+                        Pallets = line.Pallets,
+                        Quantity = (decimal)line.Cartons + (decimal)line.Pallets * 100m
+                    };
+
+                    outbound.Details.Add(detail);
+
+                    var stock = await _stockRepo.FindAsync(request.ClientId, line.ProductId, line.SectionId);
+                    // stock must exist and have sufficient qty (validated above)
+                    stock!.Cartons -= line.Cartons;
+                    stock!.Pallets -= line.Pallets;
+
+                    if (stock.Cartons < 0 || stock.Pallets < 0) throw new InvalidOperationException("Stock cannot be negative");
+
+                    _stockRepo.Update(stock);
+                }
+
+                await _outboundRepo.AddAsync(outbound);
+                await _uow.SaveChangesAsync();
+            });
 
             return outbound.Id;
         }

@@ -21,12 +21,26 @@ namespace InfraStructure.Repos
 
         public async Task<IEnumerable<Inbound>> GetAllAsync()
         {
-            return await _db.Inbounds.Include(i => i.Details).AsNoTracking().ToListAsync();
+            // Include Client and Details for mapping
+            return await _db.Inbounds
+                .Include(i => i.Client)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Product)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Section)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<Inbound?> GetByIdAsync(int id)
         {
-            return await _db.Inbounds.Include(i => i.Details).FirstOrDefaultAsync(i => i.Id == id);
+            return await _db.Inbounds
+                .Include(i => i.Client)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Product)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Section)
+                .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public void Remove(Inbound entity)
@@ -43,12 +57,26 @@ namespace InfraStructure.Repos
         {
             var start = DateTime.UtcNow.Date;
             var end = start.AddDays(1);
-            return await _db.Inbounds.Where(i => i.CreatedAt >= start && i.CreatedAt < end).Include(i => i.Details).ToListAsync();
+            return await _db.Inbounds
+                .Where(i => i.CreatedAt >= start && i.CreatedAt < end)
+                .Include(i => i.Client)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Product)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Section)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Inbound>> GetByDateRangeAsync(DateTime start, DateTime end)
         {
-            return await _db.Inbounds.Where(i => i.CreatedAt >= start && i.CreatedAt < end).Include(i => i.Details).ToListAsync();
+            return await _db.Inbounds
+                .Where(i => i.CreatedAt >= start && i.CreatedAt < end)
+                .Include(i => i.Client)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Product)
+                .Include(i => i.Details)
+                    .ThenInclude(d => d.Section)
+                .ToListAsync();
         }
     }
 }

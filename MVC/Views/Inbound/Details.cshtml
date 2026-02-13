@@ -25,8 +25,8 @@
                         @foreach (var d in Model.Details)
                         {
                             <tr>
-                                <td>@(d.ProductName ?? d.ProductId.ToString())</td>
-                                <td>@(d.SectionName ?? d.SectionId.ToString())</td>
+                                <td>@(string.IsNullOrWhiteSpace(d.ProductName) ? d.ProductId.ToString() : d.ProductName)</td>
+                                <td>@(string.IsNullOrWhiteSpace(d.SectionName) ? d.SectionId.ToString() : d.SectionName)</td>
                                 <td class="text-end">@d.Cartons</td>
                                 <td class="text-end">@d.Pallets</td>
                             </tr>

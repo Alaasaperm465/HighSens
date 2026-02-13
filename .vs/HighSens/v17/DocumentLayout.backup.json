@@ -3,20 +3,44 @@
   "WorkspaceRootPath": "E:\\Alaa Sabar 2\\Backend\\HighSens\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\css\\site-responsive.css||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:wwwroot\\css\\site-responsive.css||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\stock\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\stock\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\viewmodels\\stock\\stockindexvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\viewmodels\\stock\\stockindexvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4A40372-4D44-417C-B12E-42D1CE4048CB}|Application\\Application.csproj|e:\\alaa sabar 2\\backend\\highsens\\application\\services\\stockservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4A40372-4D44-417C-B12E-42D1CE4048CB}|Application\\Application.csproj|solutionrelative:application\\services\\stockservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\controllers\\stockcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\controllers\\stockcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\controllers\\inboundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\controllers\\inboundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|e:\\alaa sabar 2\\backend\\highsens\\infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|solutionrelative:infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|e:\\alaa sabar 2\\backend\\highsens\\infrastructure\\context\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|solutionrelative:infrastructure\\context\\dbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Migrations\\20260210091148_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:InfraStructure\\Migrations\\20260210091148_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|e:\\alaa sabar 2\\backend\\highsens\\infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|solutionrelative:infrastructure\\context\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C4897BC2-DE02-4BB5-9C3A-8C7098B75D91}|InfraStructure\\InfraStructure.csproj|e:\\alaa sabar 2\\backend\\highsens\\infrastructure\\repos\\productrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -29,6 +53,50 @@
     {
       "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\mvc.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\mvc.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\inbound\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\inbound\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\viewmodels\\inbound\\inbounddetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\viewmodels\\inbound\\inbounddetailvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\mapping\\inboundprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\mapping\\inboundprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\inbound\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\inbound\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4A40372-4D44-417C-B12E-42D1CE4048CB}|Application\\Application.csproj|e:\\alaa sabar 2\\backend\\highsens\\application\\services\\outboundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4A40372-4D44-417C-B12E-42D1CE4048CB}|Application\\Application.csproj|solutionrelative:application\\services\\outboundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\viewmodels\\account\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\viewmodels\\account\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|e:\\alaa sabar 2\\backend\\highsens\\mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +106,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 17,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,33 +118,252 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "20260210091148_init.cs",
-              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Migrations\\20260210091148_init.cs",
-              "RelativeDocumentMoniker": "InfraStructure\\Migrations\\20260210091148_init.cs",
-              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Migrations\\20260210091148_init.cs",
-              "RelativeToolTip": "InfraStructure\\Migrations\\20260210091148_init.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T09:11:48.894Z",
+              "DocumentIndex": 23,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Account\\Login.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADcAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-12T13:14:30.215Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MVC",
+              "DocumentIndex": 22,
+              "Title": "LoginViewModel.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Account\\LoginViewModel.cs",
+              "RelativeDocumentMoniker": "MVC\\ViewModels\\Account\\LoginViewModel.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Account\\LoginViewModel.cs",
+              "RelativeToolTip": "MVC\\ViewModels\\Account\\LoginViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T13:14:14.965Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "MVC\\Controllers\\AccountController.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "MVC\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAABRwEgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T13:14:06.695Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Stock\\Index.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Stock\\Index.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Stock\\Index.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Stock\\Index.cshtml",
+              "ViewState": "AgIAAEsAAACAqqqqHscvwEwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-12T12:31:53.562Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StockIndexVM.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Stock\\StockIndexVM.cs",
+              "RelativeDocumentMoniker": "MVC\\ViewModels\\Stock\\StockIndexVM.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Stock\\StockIndexVM.cs",
+              "RelativeToolTip": "MVC\\ViewModels\\Stock\\StockIndexVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:31:27.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "OutboundService.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Services\\OutboundService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\OutboundService.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Services\\OutboundService.cs",
+              "RelativeToolTip": "Application\\Services\\OutboundService.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:30:36.421Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StockService.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Services\\StockService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\StockService.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\Application\\Services\\StockService.cs",
+              "RelativeToolTip": "Application\\Services\\StockService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAADwvxwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:15:24.81Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "StockController.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\StockController.cs",
+              "RelativeDocumentMoniker": "MVC\\Controllers\\StockController.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\StockController.cs",
+              "RelativeToolTip": "MVC\\Controllers\\StockController.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAASwEQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:15:03.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Details.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Inbound\\Details.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Details.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Inbound\\Details.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-12T12:08:18.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "InboundProfile.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Mapping\\InboundProfile.cs",
+              "RelativeDocumentMoniker": "MVC\\Mapping\\InboundProfile.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Mapping\\InboundProfile.cs",
+              "RelativeToolTip": "MVC\\Mapping\\InboundProfile.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:07:52.66Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "InboundDetailVM.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Inbound\\InboundDetailVM.cs",
+              "RelativeDocumentMoniker": "MVC\\ViewModels\\Inbound\\InboundDetailVM.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\ViewModels\\Inbound\\InboundDetailVM.cs",
+              "RelativeToolTip": "MVC\\ViewModels\\Inbound\\InboundDetailVM.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAMBUwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T12:07:39.664Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "InboundController.cs",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\InboundController.cs",
+              "RelativeDocumentMoniker": "MVC\\Controllers\\InboundController.cs",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Controllers\\InboundController.cs",
+              "RelativeToolTip": "MVC\\Controllers\\InboundController.cs",
+              "ViewState": "AgIAAKwAAAAAAAAAAAAAAKgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-12T11:56:30.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Create.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Inbound\\Create.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Create.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Inbound\\Create.cshtml",
+              "ViewState": "AgIAALMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-11T20:49:29.287Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Index.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Inbound\\Index.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Inbound\\Index.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Inbound\\Index.cshtml",
+              "ViewState": "AgIAACoAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-11T20:48:38.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "site.js",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\site.js",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "wwwroot\\js\\site.js",
+              "ViewState": "AgIAAMkAAAAAAAAAAIBJwMsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-02-11T20:48:21.69Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "site-responsive.css",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\css\\site-responsive.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site-responsive.css",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\wwwroot\\css\\site-responsive.css",
+              "RelativeToolTip": "wwwroot\\css\\site-responsive.css",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAawKcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-02-11T20:48:10.493Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAYwHMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-10T09:55:55.559Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "MVC\\Views\\Home\\Index.cshtml",
+              "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "MVC\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAJYAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-02-10T09:54:19.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "MVC.csproj",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\MVC.csproj",
               "RelativeDocumentMoniker": "MVC\\MVC.csproj",
               "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\MVC.csproj",
               "RelativeToolTip": "MVC\\MVC.csproj",
               "ViewState": "AgIAABcAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-02-10T09:09:01.152Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T09:09:01.152Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "DBContext.cs",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Context\\DBContext.cs",
               "RelativeDocumentMoniker": "InfraStructure\\Context\\DBContext.cs",
@@ -89,7 +376,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 9,
               "Title": "DBContextFactory.cs",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Context\\DBContextFactory.cs",
               "RelativeDocumentMoniker": "InfraStructure\\Context\\DBContextFactory.cs",
@@ -97,25 +384,24 @@
               "RelativeToolTip": "InfraStructure\\Context\\DBContextFactory.cs",
               "ViewState": "AgIAAHwAAAAAAAAAAAAAAHwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T08:52:52.564Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T08:52:52.564Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
               "Title": "InboundRepository.cs",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Repos\\InboundRepository.cs",
               "RelativeDocumentMoniker": "InfraStructure\\Repos\\InboundRepository.cs",
               "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Repos\\InboundRepository.cs",
               "RelativeToolTip": "InfraStructure\\Repos\\InboundRepository.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAIBQwDYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAE8AAAAAAAAAAABRwFIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-09T22:07:07.313Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "ProductRepository.cs",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\InfraStructure\\Repos\\ProductRepository.cs",
               "RelativeDocumentMoniker": "InfraStructure\\Repos\\ProductRepository.cs",
@@ -123,18 +409,17 @@
               "RelativeToolTip": "InfraStructure\\Repos\\ProductRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T22:06:21.692Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T22:06:21.692Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Program.cs",
               "RelativeDocumentMoniker": "MVC\\Program.cs",
               "ToolTip": "E:\\Alaa Sabar 2\\Backend\\HighSens\\MVC\\Program.cs",
               "RelativeToolTip": "MVC\\Program.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAAAAEsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAGAAAAAAAAAAAEBVwGQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-09T21:58:37.409Z",
               "EditorCaption": ""
