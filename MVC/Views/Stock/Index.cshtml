@@ -1,12 +1,12 @@
-@model MVC.ViewModels.Stock.StockIndexVM
+﻿@model MVC.ViewModels.Stock.StockIndexVM
 @{
-    ViewData["Title"] = "HighSens � Stock Dashboard";
+    ViewData["Title"] = "HighSens — Stock Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container-fluid mt-3">
     <div class="row mb-3">
         <div class="col-12 d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">HighSens � Stock Dashboard</h2>
+            <h2 class="mb-0">المخزون</h2>
         </div>
     </div>
 
@@ -15,9 +15,9 @@
             <div class="card shadow-sm p-3">
                 <form method="get" id="clientFilterForm" class="d-flex flex-column flex-sm-row gap-2 align-items-start align-items-sm-center">
                     <div class="me-2">
-                        <label class="form-label d-block">Client</label>
+                        <label class="form-label d-block">العميل</label>
                         <select name="clientId" class="form-select" onchange="document.getElementById('clientFilterForm').submit()">
-                            <option value="">-- Select client --</option>
+                            <option value="">-- العميل --</option>
                             @foreach(var c in Model.Clients)
                             {
                                 var isSelected = Model.SelectedClientId.HasValue && Model.SelectedClientId.Value.ToString() == c.Value;
@@ -26,7 +26,7 @@
                         </select>
                     </div>
                     <div class="ms-auto text-muted small">
-                        <span class="badge bg-info text-dark">@Model.Stocks.Count</span> records
+                        <span class="badge bg-info text-dark">@Model.Stocks.Count</span> الكمية
                     </div>
                 </form>
             </div>
@@ -39,7 +39,7 @@
                 <div class="card-body">
                     @if (!Model.SelectedClientId.HasValue)
                     {
-                        <div class="text-muted">Select client to view stock</div>
+                        <div class="text-muted">اختر العميل لعرض المخزون</div>
                     }
                     else
                     {
@@ -47,11 +47,11 @@
                             <table class="table table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Client</th>
-                                        <th>Product</th>
-                                        <th>Section</th>
-                                        <th class="text-end">Cartons</th>
-                                        <th class="text-end">Pallets</th>
+                                        <th>العميل</th>
+                                        <th>المنتج</th>
+                                        <th>المخزن</th>
+                                        <th class="text-end">عدد الكرتون</th>
+                                        <th class="text-end">عدد البالتات</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -1,15 +1,25 @@
-@model IEnumerable<HighSens.Domain.Outbound>
+﻿@model IEnumerable<HighSens.Domain.Outbound>
 @{
     ViewData["Title"] = "Outbound";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Outbounds</h1>
-<p><a class="btn btn-primary" href="/Outbound/Create">Create Outbound</a></p>
+<h1>اذن الصادر</h1>
+<p><a class="btn btn-primary" href="/Outbound/Create">اذن جديد</a></p>
 <table class="table table-striped">
-    <thead><tr><th>Id</th><th>Client</th><th>Created</th></tr></thead>
+    <thead>
+        <tr>
+            @* <th>Id</th> *@
+            <th>العميل</th>
+            <th>تاريخ الإنشاء</th>
+        </tr>
+    </thead>
     <tbody>
     @foreach(var o in Model) {
-        <tr><td>@o.Id</td><td>@o.ClientId</td><td>@o.CreatedAt</td></tr>
+        <tr>
+            @* <td>@o.Id</td> *@
+            <td>@o.ClientId</td>
+            <td>@o.CreatedAt</td>
+        </tr>
     }
     </tbody>
 </table>

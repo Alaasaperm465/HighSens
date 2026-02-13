@@ -392,7 +392,7 @@ namespace InfraStructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 2, 10, 9, 11, 45, 255, DateTimeKind.Utc).AddTicks(7152),
+                            CreatedAt = new DateTime(2026, 2, 13, 19, 21, 43, 885, DateTimeKind.Utc).AddTicks(3955),
                             Password = "123456",
                             Role = "Admin",
                             Username = "admin"
@@ -400,7 +400,7 @@ namespace InfraStructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2026, 2, 10, 9, 11, 45, 255, DateTimeKind.Utc).AddTicks(8580),
+                            CreatedAt = new DateTime(2026, 2, 13, 19, 21, 43, 885, DateTimeKind.Utc).AddTicks(4965),
                             Password = "123456",
                             Role = "StoreKeeper",
                             Username = "storekeeper"

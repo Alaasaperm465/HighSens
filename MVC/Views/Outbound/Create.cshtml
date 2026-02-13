@@ -1,44 +1,65 @@
-@{
+﻿@{
     ViewData["Title"] = "Create Outbound";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Create Outbound</h1>
-@if(TempData["Error"] != null) {
+
+<h1>إنشاء إذن صادر</h1>
+
+@if (TempData["Error"] != null)
+{
     <div class="alert alert-danger">@TempData["Error"]</div>
 }
-@if(TempData["Success"] != null) {
+@if (TempData["Success"] != null)
+{
     <div class="alert alert-success">@TempData["Success"]</div>
 }
+
 <form method="post">
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Client</label>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">العميل</label>
             <select name="clientId" class="form-select">
-                @foreach(var c in (IEnumerable<HighSens.Domain.Client>)ViewBag.Clients) {
+                <option value="">-- اختر العميل --</option>
+                @foreach (var c in (IEnumerable<HighSens.Domain.Client>)ViewBag.Clients)
+                {
                     <option value="@c.Id">@c.Name</option>
                 }
             </select>
         </div>
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Product</label>
+
+        <div class="col-md-4">
+            <label class="form-label">المنتج</label>
             <select name="productId" class="form-select">
-                @foreach(var p in (IEnumerable<HighSens.Domain.Product>)ViewBag.Products) {
+                <option value="">-- اختر المنتج --</option>
+                @foreach (var p in (IEnumerable<HighSens.Domain.Product>)ViewBag.Products)
+                {
                     <option value="@p.Id">@p.Name</option>
                 }
             </select>
         </div>
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Section</label>
+
+        <div class="col-md-4">
+            <label class="form-label">المخزن</label>
             <select name="sectionId" class="form-select">
-                @foreach(var s in (IEnumerable<HighSens.Domain.Section>)ViewBag.Sections) {
+                <option value="">-- اختر المخزن --</option>
+                @foreach (var s in (IEnumerable<HighSens.Domain.Section>)ViewBag.Sections)
+                {
                     <option value="@s.Id">@s.Name</option>
                 }
             </select>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3 mb-3"><label class="form-label">Cartons</label><input class="form-control" name="cartons" /></div>
-        <div class="col-md-3 mb-3"><label class="form-label">Pallets</label><input class="form-control" name="pallets" /></div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label class="form-label">عدد الكرتون</label>
+            <input type="number" name="cartons" class="form-control" min="0" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">عدد البالتات</label>
+            <input type="number" name="pallets" class="form-control" min="0" />
+        </div>
     </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
+
+    <button type="submit" class="btn btn-primary">حفظ</button>
 </form>

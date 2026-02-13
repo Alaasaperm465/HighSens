@@ -1,4 +1,4 @@
-@model MVC.ViewModels.Account.LoginViewModel
+﻿@model MVC.ViewModels.Account.LoginViewModel
 @{
     ViewData["Title"] = "Sign in - HighSens";
     Layout = null; // full-screen custom layout
@@ -20,13 +20,13 @@
 <body>
     <div class="glass">
         <div class="mb-3 text-center">
-            <div class="logo">HighSens Warehouse System</div>
-            <div class="text-muted small">Sign in to continue</div>
+            <div class="logo">HighSens System</div>
+            <div class="text-muted small">قم بتسجيل الدخول</div>
         </div>
 
         @if (!ViewData.ModelState.IsValid)
         {
-            <div class="alert alert-danger">Please fix the errors below</div>
+            <div class="alert alert-danger">تحقق من الباسورد او اسم المستخدم</div>
         }
 
         <form asp-action="Login" method="post">
@@ -45,7 +45,7 @@
                 <input asp-for="RememberMe" class="form-check-input" />
                 <label asp-for="RememberMe" class="form-check-label"></label>
             </div>
-            <button class="btn btn-primary w-100">Sign in</button>
+            <button class="btn btn-primary w-100">تسجيل الدخول</button>
         </form>
     </div>
 
