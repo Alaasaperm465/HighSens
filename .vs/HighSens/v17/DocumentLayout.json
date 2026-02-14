@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "F:\\.net\\HighSense\\HighSens\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\outbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\outbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\inbound\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|solutionrelative:mvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{65BEA937-8A27-49B4-907C-D545E37777A3}|MVC\\MVC.csproj|f:\\.net\\highsense\\highsens\\mvc\\viewmodels\\outbound\\outboindlistvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -149,7 +149,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": 27,
           "Children": [
             {
               "$type": "Bookmark",
@@ -169,8 +169,7 @@
               "RelativeToolTip": "MVC\\ViewModels\\Outbound\\OutboindListVM.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-13T21:30:30.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-13T21:30:30.678Z"
             },
             {
               "$type": "Document",
@@ -230,25 +229,24 @@
               "RelativeToolTip": "MVC\\Views\\Products\\Create.cshtml",
               "ViewState": "AgIAAAsAAAAAAAAAAADwvyMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-13T13:17:11.801Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-13T13:17:11.801Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Outbound\\Index.cshtml",
               "RelativeDocumentMoniker": "MVC\\Views\\Outbound\\Index.cshtml",
               "ToolTip": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Outbound\\Index.cshtml",
               "RelativeToolTip": "MVC\\Views\\Outbound\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAbAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABEAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-02-13T13:16:37.056Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "MVC\\Views\\Shared\\_Layout.cshtml",
@@ -256,8 +254,7 @@
               "RelativeToolTip": "MVC\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAGIAAAAAAAAAAAAAAGgAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-10T09:55:55.559Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T09:55:55.559Z"
             },
             {
               "$type": "Document",
@@ -269,8 +266,7 @@
               "RelativeToolTip": "MVC\\Views\\Outbound\\Create.cshtml",
               "ViewState": "AgIAACkAAAAAAAAAAADwvzEAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-13T13:15:44.77Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-13T13:15:44.77Z"
             },
             {
               "$type": "Document",
@@ -308,13 +304,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Login.cshtml",
               "DocumentMoniker": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Account\\Login.cshtml",
               "RelativeDocumentMoniker": "MVC\\Views\\Account\\Login.cshtml",
               "ToolTip": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Account\\Login.cshtml",
               "RelativeToolTip": "MVC\\Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAB8AAAAAAAAAAADwvzcAAAAHAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAIwB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-02-12T13:14:30.215Z",
               "EditorCaption": ""
@@ -414,8 +410,7 @@
               "RelativeToolTip": "MVC\\Views\\Inbound\\Details.cshtml",
               "ViewState": "AgIAADIAAAAAAAAAAAAAADYAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-12T12:08:18.249Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-12T12:08:18.249Z"
             },
             {
               "$type": "Document",
@@ -463,18 +458,17 @@
               "RelativeToolTip": "MVC\\Views\\Inbound\\Create.cshtml",
               "ViewState": "AgIAAJcAAAAAAAAAAAAIwJ0AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-11T20:49:29.287Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T20:49:29.287Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Inbound\\Index.cshtml",
               "RelativeDocumentMoniker": "MVC\\Views\\Inbound\\Index.cshtml",
               "ToolTip": "F:\\.net\\HighSense\\HighSens\\MVC\\Views\\Inbound\\Index.cshtml",
               "RelativeToolTip": "MVC\\Views\\Inbound\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAAFgAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-02-11T20:48:38.635Z",
               "EditorCaption": ""
