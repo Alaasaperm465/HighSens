@@ -76,6 +76,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdHNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[F:/.net/HighSense/HighSens/MVC/Views/Query/ClientInSection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlcnlcQ2xpZW50SW5TZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/.net/HighSense/HighSens/MVC/Views/Query/ClientProductInSection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlcnlcQ2xpZW50UHJvZHVjdEluU2VjdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/.net/HighSense/HighSens/MVC/Views/Query/ClientTotal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlcnlcQ2xpZW50VG90YWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[F:/.net/HighSense/HighSens/MVC/Views/Query/SectionTotal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUXVlcnlcU2VjdGlvblRvdGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [F:/.net/HighSense/HighSens/MVC/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

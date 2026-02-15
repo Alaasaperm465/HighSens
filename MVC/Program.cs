@@ -23,6 +23,9 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+// Add Razor Pages support
+builder.Services.AddRazorPages();
+
 // Configure Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
@@ -92,6 +95,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Map Razor Pages
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

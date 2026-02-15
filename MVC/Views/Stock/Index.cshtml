@@ -7,6 +7,15 @@
     <div class="row mb-3">
         <div class="col-12 d-flex justify-content-between align-items-center">
             <h2 class="mb-0">المخزون</h2>
+            <div>
+                <!-- Buttons linking to Razor Pages -->
+                <div class="btn-group" role="group" aria-label="Query actions">
+                    <a class="btn btn-outline-primary" asp-controller="Query" asp-action="ClientTotal"> عميل</a>
+                    <a class="btn btn-outline-primary" asp-controller="Query" asp-action="SectionTotal">مجموع قسم</a>
+                    <a class="btn btn-outline-primary" asp-controller="Query" asp-action="ClientInSection">عميل في قسم</a>
+                    <a class="btn btn-outline-primary" asp-controller="Query" asp-action="ClientProductInSection">عميل+منتج في قسم</a>
+                </div>
+            </div>
         </div>
     </div>
 

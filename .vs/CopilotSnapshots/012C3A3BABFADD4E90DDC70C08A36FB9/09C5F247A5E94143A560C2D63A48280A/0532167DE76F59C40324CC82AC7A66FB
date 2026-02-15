@@ -1,0 +1,27 @@
+﻿@page
+@model QuerySectionTotalModel
+@{
+    ViewData["Title"] = "مجموع قسم";
+}
+<div class="container mt-3">
+    <h3>مجموع المخزون في قسم</h3>
+
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label class="form-label">Section Id</label>
+            <input type="number" name="sectionId" value="@Model.SectionId" class="form-control" />
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary">حساب</button>
+        </div>
+    </form>
+
+    @if (Model.HasResult)
+    {
+        <div class="card mt-3 p-3">
+            <div>SectionId: <strong>@Model.Result.SectionId</strong></div>
+            <div>Total Cartons: <strong>@Model.Result.TotalCartons</strong></div>
+            <div>Total Pallets: <strong>@Model.Result.TotalPallets</strong></div>
+        </div>
+    }
+</div>
