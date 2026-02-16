@@ -4,6 +4,10 @@ using HighSens.Application.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.ViewModels.Inbound;
+using MVC.ViewModels.Ajax;
+using InfraStructure.Context;
+using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVC.Controllers
 {
@@ -14,19 +18,22 @@ namespace MVC.Controllers
         private readonly HighSens.Application.Interfaces.IServices.IProductService _productService;
         private readonly HighSens.Application.Interfaces.IServices.ISectionService _sectionService;
         private readonly IMapper _mapper;
+        private readonly DBContext _db;
 
         public InboundController(
             IInboundService inboundService,
             HighSens.Application.Interfaces.IServices.IClientService clientService,
             HighSens.Application.Interfaces.IServices.IProductService productService,
             HighSens.Application.Interfaces.IServices.ISectionService sectionService,
-            IMapper mapper)
+            IMapper mapper,
+            DBContext db)
         {
             _inboundService = inboundService;
             _clientService = clientService;
             _productService = productService;
             _sectionService = sectionService;
             _mapper = mapper;
+            _db = db;
         }
 
         public async Task<IActionResult> Index()
@@ -160,6 +167,157 @@ namespace MVC.Controllers
             }
             catch (Exception)
             {
+                return StatusCode(500, new { success = false, error = "Server error" });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Inbound/AddLineAjax")]
+        public async Task<IActionResult> AddLineAjax([FromBody] AddLineRequest req)
+        {
+            if (req == null) return BadRequest(new { success = false, error = "Request body required" });
+            if (req.ClientId <= 0) return BadRequest(new { success = false, error = "ClientId required" });
+            if (req.ProductId <= 0) return BadRequest(new { success = false, error = "ProductId required" });
+            if (req.SectionId <= 0) return BadRequest(new { success = false, error = "SectionId required" });
+            if (req.Cartons < 0 || req.Pallets < 0) return BadRequest(new { success = false, error = "Quantities must be non-negative" });
+
+            var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == req.ProductId && p.IsActive);
+            var section = await _db.Sections.FirstOrDefaultAsync(s => s.Id == req.SectionId);
+            var client = await _db.Clients.FirstOrDefaultAsync(c => c.Id == req.ClientId);
+
+            if (product == null || section == null || client == null)
+            {
+                return BadRequest(new { success = false, error = "Invalid client/product/section" });
+            }
+
+            // If inboundId provided -> add detail to existing inbound
+            if (req.InboundId.HasValue && req.InboundId.Value > 0)
+            {
+                var inbound = await _db.Inbounds.Include(i => i.Details).FirstOrDefaultAsync(i => i.Id == req.InboundId.Value);
+                if (inbound == null) return NotFound(new { success = false, error = "Inbound not found" });
+                if (inbound.ClientId != req.ClientId) return BadRequest(new { success = false, error = "Client mismatch" });
+
+                var detail = new InboundDetail
+                {
+                    InboundId = inbound.Id,
+                    ProductId = req.ProductId,
+                    SectionId = req.SectionId,
+                    Cartons = req.Cartons,
+                    Pallets = req.Pallets,
+                    Quantity = req.Cartons + (req.Pallets * 100m)
+                };
+
+                inbound.Details.Add(detail);
+
+                // update stocks
+                var stock = await _db.Stocks.FirstOrDefaultAsync(s => s.ClientId == inbound.ClientId && s.ProductId == req.ProductId && s.SectionId == req.SectionId);
+                if (stock == null)
+                {
+                    stock = new Stock { ClientId = inbound.ClientId, ProductId = req.ProductId, SectionId = req.SectionId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.Stocks.AddAsync(stock);
+                }
+                else
+                {
+                    stock.Cartons += req.Cartons;
+                    stock.Pallets += req.Pallets;
+                    _db.Stocks.Update(stock);
+                }
+
+                var prodStock = await _db.ProductStocks.FirstOrDefaultAsync(ps => ps.ClientId == inbound.ClientId && ps.ProductId == req.ProductId);
+                if (prodStock == null)
+                {
+                    prodStock = new ProductStock { ClientId = inbound.ClientId, ProductId = req.ProductId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.ProductStocks.AddAsync(prodStock);
+                }
+                else
+                {
+                    prodStock.Cartons += req.Cartons;
+                    prodStock.Pallets += req.Pallets;
+                    _db.ProductStocks.Update(prodStock);
+                }
+
+                var secStock = await _db.SectionStocks.FirstOrDefaultAsync(ss => ss.ClientId == inbound.ClientId && ss.SectionId == req.SectionId);
+                if (secStock == null)
+                {
+                    secStock = new SectionStock { ClientId = inbound.ClientId, SectionId = req.SectionId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.SectionStocks.AddAsync(secStock);
+                }
+                else
+                {
+                    secStock.Cartons += req.Cartons;
+                    secStock.Pallets += req.Pallets;
+                    _db.SectionStocks.Update(secStock);
+                }
+
+                await _db.SaveChangesAsync();
+                return Ok(new { success = true, id = inbound.Id });
+            }
+
+            // Otherwise create new inbound with this single line
+            using var tx = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                var inbound = new Inbound { ClientId = client.Id, CreatedAt = DateTime.UtcNow };
+                var detail = new InboundDetail
+                {
+                    ProductId = req.ProductId,
+                    SectionId = req.SectionId,
+                    Cartons = req.Cartons,
+                    Pallets = req.Pallets,
+                    Quantity = req.Cartons + (req.Pallets * 100m)
+                };
+                inbound.Details.Add(detail);
+
+                await _db.Inbounds.AddAsync(inbound);
+
+                // update stocks
+                var stock = await _db.Stocks.FirstOrDefaultAsync(s => s.ClientId == client.Id && s.ProductId == req.ProductId && s.SectionId == req.SectionId);
+                if (stock == null)
+                {
+                    stock = new Stock { ClientId = client.Id, ProductId = req.ProductId, SectionId = req.SectionId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.Stocks.AddAsync(stock);
+                }
+                else
+                {
+                    stock.Cartons += req.Cartons;
+                    stock.Pallets += req.Pallets;
+                    _db.Stocks.Update(stock);
+                }
+
+                var prodStock = await _db.ProductStocks.FirstOrDefaultAsync(ps => ps.ClientId == client.Id && ps.ProductId == req.ProductId);
+                if (prodStock == null)
+                {
+                    prodStock = new ProductStock { ClientId = client.Id, ProductId = req.ProductId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.ProductStocks.AddAsync(prodStock);
+                }
+                else
+                {
+                    prodStock.Cartons += req.Cartons;
+                    prodStock.Pallets += req.Pallets;
+                    _db.ProductStocks.Update(prodStock);
+                }
+
+                var secStock = await _db.SectionStocks.FirstOrDefaultAsync(ss => ss.ClientId == client.Id && ss.SectionId == req.SectionId);
+                if (secStock == null)
+                {
+                    secStock = new SectionStock { ClientId = client.Id, SectionId = req.SectionId, Cartons = req.Cartons, Pallets = req.Pallets };
+                    await _db.SectionStocks.AddAsync(secStock);
+                }
+                else
+                {
+                    secStock.Cartons += req.Cartons;
+                    secStock.Pallets += req.Pallets;
+                    _db.SectionStocks.Update(secStock);
+                }
+
+                await _db.SaveChangesAsync();
+                await tx.CommitAsync();
+                return Ok(new { success = true, id = inbound.Id });
+            }
+            catch (System.Exception ex)
+            {
+                await tx.RollbackAsync();
                 return StatusCode(500, new { success = false, error = "Server error" });
             }
         }

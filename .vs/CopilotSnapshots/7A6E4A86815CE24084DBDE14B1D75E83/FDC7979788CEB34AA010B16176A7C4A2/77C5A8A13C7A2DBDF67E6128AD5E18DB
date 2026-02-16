@@ -1,0 +1,137 @@
+﻿@model HighSens.Domain.Client
+@{
+    ViewData["Title"] = "تفاصيل العميل";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="mb-0">تفاصيل العميل</h3>
+            <div class="text-muted">@Model.Name</div>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">تعديل</a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card p-3 mb-3">
+                <h5>معلومات عامة</h5>
+                <div class="mt-2"><strong>الاسم:</strong> @Model.Name</div>
+                <div class="mt-1"><strong>العنوان:</strong> @Model.Address</div>
+                <div class="mt-1"><strong>الهاتف:</strong> @Model.PhoneNumber</div>
+            </div>
+
+            <div class="card p-3">
+                <h6>الصادرات / الواردات</h6>
+                <div id="clientSummary" class="mt-2 text-muted">جاري التحميل...</div>
+                <a id="exportCsvBtn" class="btn btn-outline-secondary btn-sm mt-2" href="#" style="display:none;">تصدير CSV</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-3 mb-3">
+                <h5>الحركات الأخيرة</h5>
+                <div id="recentMovements">جاري التحميل...</div>
+            </div>
+
+            <div class="card p-3">
+                <h5>تفصيل حسب المنتج</h5>
+                <div id="byProduct">جاري التحميل...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+            const clientId = @Model.Id;
+            const summaryEl = document.getElementById('clientSummary');
+            const recentEl = document.getElementById('recentMovements');
+            const byProductEl = document.getElementById('byProduct');
+            const exportBtn = document.getElementById('exportCsvBtn');
+
+            function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+            function renderError(el, msg){ el.innerHTML = `<div class="text-danger">${msg}</div>`; }
+            function renderLoading(el){ el.innerHTML = '<div class="text-muted">جاري التحميل...</div>'; }
+
+            async function loadSummary(){
+                renderLoading(summaryEl);
+                try{
+                    // totals per client across system
+                    const resp = await fetch('/api/clients/' + clientId + '/summary');
+                    if(!resp.ok) throw new Error('Failed');
+                    const data = await resp.json();
+                    let html = `<div>إجمالي الكرتون: <strong>${data.totalCartons}</strong></div>`;
+                    html += `<div>إجمالي البالتات: <strong>${data.totalPallets}</strong></div>`;
+                    summaryEl.innerHTML = html;
+
+                    exportBtn.style.display = 'inline-block';
+                    exportBtn.href = '/Query/ClientTotalCsv?clientId=' + encodeURIComponent(clientId);
+                }catch(e){ console.error(e); renderError(summaryEl, 'فشل تحميل الملخص'); }
+            }
+
+            async function loadRecent(){
+                renderLoading(recentEl);
+                try{
+                    // recent inbounds and outbounds for client
+                    const [inbResp, outResp] = await Promise.all([
+                        fetch('/api/inbounds?clientId=' + clientId + '&limit=5'),
+                        fetch('/api/outbounds?clientId=' + clientId + '&limit=5')
+                    ]);
+
+                    let html = '';
+                    if(inbResp.ok){
+                        const inb = await inbResp.json();
+                        if(inb.length){
+                            html += '<h6 class="mb-2">الواردات</h6><div class="list-group mb-2">';
+                            inb.forEach(i=> html += `<div class="list-group-item py-2">أذن #${i.id} — ${new Date(i.createdAt).toLocaleString()} — خطوط: ${i.detailsCount}</div>`);
+                            html += '</div>';
+                        }
+                    }
+
+                    if(outResp.ok){
+                        const outb = await outResp.json();
+                        if(outb.length){
+                            html += '<h6 class="mb-2">الصادرات</h6><div class="list-group">';
+                            outb.forEach(o=> html += `<div class="list-group-item py-2">أذن #${o.id} — ${new Date(o.createdAt).toLocaleString()} — خطوط: ${o.detailsCount}</div>`);
+                            html += '</div>';
+                        }
+                    }
+
+                    if(!html) html = '<div class="text-muted">لا توجد حركات حديثة.</div>';
+                    recentEl.innerHTML = html;
+                }catch(e){ console.error(e); renderError(recentEl, 'فشل تحميل الحركات'); }
+            }
+
+            async function loadByProduct(){
+                renderLoading(byProductEl);
+                try{
+                    // aggregate per product using server endpoint
+                    const resp = await fetch('/api/clients/' + clientId + '/products');
+                    if(!resp.ok) throw new Error('Failed');
+                    const data = await resp.json();
+
+                    if(!data.length){ byProductEl.innerHTML = '<div class="text-muted">لا توجد بيانات.</div>'; return; }
+
+                    let html = '<div class="table-responsive"><table class="table table-striped mb-0"><thead><tr><th>المنتج</th><th class="text-end">كرتون</th><th class="text-end">بالت</th></tr></thead><tbody>';
+                    data.forEach(p=>{
+                        html += `<tr><td>${escapeHtml(p.productName)}</td><td class="text-end">${p.cartons}</td><td class="text-end">${p.pallets}</td></tr>`;
+                    });
+                    html += '</tbody></table></div>';
+
+                    byProductEl.innerHTML = html;
+                }catch(e){ console.error(e); renderError(byProductEl, 'فشل تحميل التفصيل حسب المنتج'); }
+            }
+
+            loadSummary();
+            loadRecent();
+            loadByProduct();
+        })();
+    </script>
+}

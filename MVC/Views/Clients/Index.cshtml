@@ -96,6 +96,9 @@
                 <thead>
                     <tr>
                         <th>الاسم</th>
+                        <th>العنوان</th>
+                        <th>الهاتف</th>
+                        <th>الاجراءات</th>
                     </tr>
                 </thead>
                 <tbody id="clientsTable">
@@ -104,14 +107,40 @@
                         foreach (var c in Model)
                         {
                             <tr>
-                                <td class="fw-semibold">@c.Name</td>
+                                <td class="fw-semibold">@Html.DisplayFor(m => c.Name)</td>
+                                <td class="fw-semibold">@Html.DisplayFor(m => c.Address)</td>
+                                <td class="fw-semibold">@Html.DisplayFor(m => c.PhoneNumber)</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Client actions">
+                                        <a asp-controller="Clients"
+                                        asp-action="Details"
+                                           asp-route-id="@c.Id">
+                                            <i class="bi bi-pencil-square me-1"></i>
+                                           Details</a>
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           asp-controller="Clients"
+                                           asp-action="Edit"
+                                           asp-route-id="@c.Id">
+                                            <i class="bi bi-pencil-square me-1"></i>
+                                            تعديل
+                                        </a>
+
+                                        <form asp-controller="Clients" asp-action="Delete" asp-route-id="@c.Id" method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذا العميل؟');" style="display:inline-block;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash me-1"></i>
+                                                حذف
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td>
+                            <td colspan="4">
                                 <div class="empty-state">
                                     <i class="bi bi-people fs-1 d-block mb-3"></i>
                                     لا يوجد عملاء حالياً
@@ -133,6 +162,8 @@
         let rows = document.querySelectorAll("#clientsTable tr");
 
         rows.forEach(row => {
+            // skip empty-state row
+            if (row.querySelector('.empty-state')) return;
             let text = row.innerText.toLowerCase();
             row.style.display = text.includes(filter) ? "" : "none";
         });

@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="container-fluid">
+    <div class="row mb-4 align-items-center">
+        <div class="col-12 col-md-6">
+            <h2 class="mb-0">Dashboard</h2>
+        </div>
+        <div class="col-12 col-md-6">
+            <!-- Buttons: stacked full-width on mobile, inline on md+ -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end dashboard-actions">
+                <a class="btn btn-outline-secondary d-md-inline-flex align-items-center" asp-controller="Clients" asp-action="Create">
+                    <i class="bi bi-person-plus me-2"></i>
+                    <span>Add Client</span>
+                </a>
+                <a class="btn btn-primary d-md-inline-flex align-items-center" asp-controller="Inbound" asp-action="Create">
+                    <i class="bi bi-arrow-down-circle me-2"></i>
+                    <span>New Inbound</span>
+                </a>
+                <a class="btn btn-outline-primary d-md-inline-flex align-items-center" asp-controller="Outbound" asp-action="Create">
+                    <i class="bi bi-arrow-up-circle me-2"></i>
+                    <span>New Outbound</span>
+                </a>
+                <a class="btn btn-outline-success d-md-inline-flex align-items-center" asp-controller="Products" asp-action="Create">
+                    <i class="bi bi-box me-2"></i>
+                    <span>Add Product</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Products</div>
+                        <div class="fs-4 fw-bold">@ViewBag.TotalProducts</div>
+                    </div>
+                    <div class="text-primary fs-2">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Total Stock</div>
+                        <div class="fs-4 fw-bold">@ViewBag.TotalStock</div>
+                    </div>
+                    <div class="text-success fs-2">
+                        <i class="bi bi-bar-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Today Inbounds</div>
+                        <div class="fs-4 fw-bold">@ViewBag.TodayInbounds</div>
+                    </div>
+                    <div class="text-info fs-2">
+                        <i class="bi bi-arrow-down-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="text-muted small">Today Outbounds</div>
+                        <div class="fs-4 fw-bold">@ViewBag.TodayOutbounds</div>
+                    </div>
+                    <div class="text-warning fs-2">
+                        <i class="bi bi-arrow-up-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Inbounds</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Client</th>
+                                    <th class="d-none d-sm-table-cell">Created</th>
+                                    <th>Lines</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.RecentInbounds != null)
+                                {
+                                    foreach (var i in ViewBag.RecentInbounds)
+                                    {
+                                        <tr>
+                                            <td>@i.Id</td>
+                                            <td>@i.Client.Name</td>
+                                            <td class="d-none d-sm-table-cell">@i.CreatedAt.ToLocalTime().ToString("g")</td>
+                                            <td>@i.Details.Count</td>
+                                            <td class="text-end"><a class="btn btn-sm btn-outline-primary" asp-controller="Inbound" asp-action="Details" asp-route-id="@i.Id">Details</a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile fixed bottom action bar (visible on xs only) -->
+<div class="mobile-action-bar d-md-none fixed-bottom py-3">
+    <div class="container">
+        <div class="d-flex gap-2">
+            <a class="btn btn-success btn-lg rounded-pill flex-fill" asp-controller="Products" asp-action="Create" aria-label="Add Product">
+                <i class="bi bi-box me-2"></i>
+                <span class="d-none d-sm-inline">Product</span>
+                <span class="d-inline d-sm-none">Prod</span>
+            </a>
+            <a class="btn btn-primary btn-lg rounded-pill flex-fill" asp-controller="Inbound" asp-action="Create" aria-label="New Inbound">
+                <i class="bi bi-arrow-down-circle me-2"></i>
+                <span class="d-none d-sm-inline">Inbound</span>
+                <span class="d-inline d-sm-none">In</span>
+            </a>
+            <a class="btn btn-outline-primary btn-lg rounded-pill flex-fill" asp-controller="Outbound" asp-action="Create" aria-label="New Outbound">
+                <i class="bi bi-arrow-up-circle me-2"></i>
+                <span class="d-none d-sm-inline">Outbound</span>
+                <span class="d-inline d-sm-none">Out</span>
+            </a>
+        </div>
+    </div>
+</div>

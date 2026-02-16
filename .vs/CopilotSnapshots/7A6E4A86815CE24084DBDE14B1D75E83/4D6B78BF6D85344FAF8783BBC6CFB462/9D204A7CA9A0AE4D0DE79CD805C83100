@@ -1,0 +1,380 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using InfraStructure.Context;
+using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using MVC.ViewModels.Products;
+
+namespace MVC.Controllers
+{
+    public class ProductsController : Controller
+    {
+        private readonly DBContext _db;
+        private readonly IWebHostEnvironment _env;
+        private const int DefaultPageSize = 10;
+
+        public ProductsController(DBContext db, IWebHostEnvironment env) { _db = db; _env = env; }
+
+        public IActionResult Index(string? search, int page = 1, int pageSize = DefaultPageSize)
+        {
+            var query = _db.Products.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(p => p.Name.Contains(search) || (p.Description ?? string.Empty).Contains(search));
+            }
+
+            var total = query.Count();
+            var items = query.OrderBy(p => p.Name)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+            var vm = new ProductIndexVM
+            {
+                Products = items,
+                Search = search,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = total
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new Product());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Product product, Microsoft.AspNetCore.Http.IFormFile? imageFile)
+        {
+            if (!ModelState.IsValid) return View(product);
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var uploads = Path.Combine(_env.WebRootPath ?? "wwwroot", "images", "products");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+                var fileName = Path.GetRandomFileName() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+                using (var fs = System.IO.File.Create(filePath))
+                {
+                    imageFile.CopyTo(fs);
+                }
+                product.ImageUrl = "/images/products/" + fileName;
+            }
+
+            try
+            {
+                _db.Products.Add(product);
+                _db.SaveChanges();
+                TempData["Success"] = "?? ????? ??????.";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "??? ??? ????? ????? ??????.");
+                return View(product);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var product = _db.Products.Find(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Product product, Microsoft.AspNetCore.Http.IFormFile? imageFile)
+        {
+            if (!ModelState.IsValid) return View(product);
+            var existing = _db.Products.Find(product.Id);
+            if (existing == null) return NotFound();
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var uploads = Path.Combine(_env.WebRootPath ?? "wwwroot", "images", "products");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+                var fileName = Path.GetRandomFileName() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+                using (var fs = System.IO.File.Create(filePath))
+                {
+                    imageFile.CopyTo(fs);
+                }
+                // delete old file if exists
+                if (!string.IsNullOrWhiteSpace(existing.ImageUrl) && existing.ImageUrl.StartsWith("/images/"))
+                {
+                    var oldPath = Path.Combine(_env.WebRootPath ?? "wwwroot", existing.ImageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    try { if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath); } catch { }
+                }
+                existing.ImageUrl = "/images/products/" + fileName;
+            }
+
+            existing.Name = product.Name?.Trim() ?? existing.Name;
+            existing.Description = product.Description;
+            existing.Price = product.Price;
+            existing.IsActive = product.IsActive;
+
+            try
+            {
+                _db.Products.Update(existing);
+                _db.SaveChanges();
+                TempData["Success"] = "?? ????? ??????.";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "??? ??? ????? ??? ?????????.");
+                return View(product);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var product = _db.Products.Find(id);
+            if (product == null) return NotFound();
+
+            try
+            {
+                // delete file if exists
+                if (!string.IsNullOrWhiteSpace(product.ImageUrl) && product.ImageUrl.StartsWith("/images/"))
+                {
+                    var oldPath = Path.Combine(_env.WebRootPath ?? "wwwroot", product.ImageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    try { if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath); } catch { }
+                }
+
+                _db.Products.Remove(product);
+                _db.SaveChanges();
+                TempData["Success"] = "?? ??? ??????.";
+            }
+            catch (System.Exception)
+            {
+                TempData["Error"] = "?? ???? ??? ?????? ???? ????? ?????? ????.";
+            }
+
+            return RedirectToAction("Index");
+        }
+        //Product Overlap تداخل اصناف
+        // طرح كمية من صنف و اضافة نفس الكمية الى صنف اخر
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProductOverlap(ProductOverlapDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid data";
+                return RedirectToAction("OverlapForm");
+            }
+
+            if (dto.SourceProductId == dto.TargetProductId)
+            {
+                TempData["Error"] = "Source and target product must be different";
+                return RedirectToAction("OverlapForm");
+            }
+
+            if (dto.Cartons <= 0 && dto.Pallets <= 0)
+            {
+                TempData["Error"] = "At least one of cartons or pallets must be greater than zero";
+                return RedirectToAction("OverlapForm");
+            }
+
+            var client = await _context.Clients
+                .FirstOrDefaultAsync(c => c.Id == dto.ClientId);
+
+            if (client == null)
+            {
+                TempData["Error"] = "Client not found";
+                return RedirectToAction("OverlapForm");
+            }
+
+            var sectionExists = await _context.Sections
+                .AnyAsync(s => s.Id == dto.SectionId);
+
+            if (!sectionExists)
+            {
+                TempData["Error"] = "Section not found";
+                return RedirectToAction("OverlapForm");
+            }
+
+            var sourceProduct = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == dto.SourceProductId && p.IsActive);
+
+            var targetProduct = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == dto.TargetProductId && p.IsActive);
+
+            if (sourceProduct == null || targetProduct == null)
+            {
+                TempData["Error"] = "Invalid products";
+                return RedirectToAction("OverlapForm");
+            }
+
+            // حساب المخزون
+            var inboundCartons = await (
+                from d in _context.InboundDetails
+                join i in _context.Inbounds on d.InboundId equals i.Id
+                where d.SectionId == dto.SectionId
+                      && i.ClientId == dto.ClientId
+                      && d.ProductId == dto.SourceProductId
+                select (int?)d.Cartons
+            ).SumAsync() ?? 0;
+
+            var outboundCartons = await (
+                from d in _context.OutboundDetails
+                join o in _context.Outbounds on d.OutboundId equals o.Id
+                where d.SectionId == dto.SectionId
+                      && o.ClientId == dto.ClientId
+                      && d.ProductId == dto.SourceProductId
+                select (int?)d.Cartons
+            ).SumAsync() ?? 0;
+
+            var availableCartons = inboundCartons - outboundCartons;
+
+            if (availableCartons < dto.Cartons)
+            {
+                TempData["Error"] = "Insufficient stock";
+                return RedirectToAction("OverlapForm");
+            }
+
+            await using var tx = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var outbound = new Outbound
+                {
+                    ClientId = dto.ClientId,
+                    CreatedAt = DateTime.UtcNow,
+                    Details = new List<OutboundDetail>
+            {
+                new OutboundDetail
+                {
+                    ProductId = dto.SourceProductId,
+                    SectionId = dto.SectionId,
+                    Cartons = dto.Cartons,
+                    Pallets = dto.Pallets
+                }
+            }
+                };
+
+                var inbound = new Inbound
+                {
+                    ClientId = dto.ClientId,
+                    CreatedAt = DateTime.UtcNow,
+                    Details = new List<InboundDetail>
+            {
+                new InboundDetail
+                {
+                    ProductId = dto.TargetProductId,
+                    SectionId = dto.SectionId,
+                    Cartons = dto.Cartons,
+                    Pallets = dto.Pallets
+                }
+            }
+                };
+
+                _context.Outbounds.Add(outbound);
+                _context.Inbounds.Add(inbound);
+
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+
+                TempData["Success"] = "Product overlap completed successfully";
+                return RedirectToAction("Details", "Clients", new { id = dto.ClientId });
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                TempData["Error"] = "Operation failed";
+                return RedirectToAction("OverlapForm");
+            }
+        }
+        //Product transfer تحويل كمية نتجات وبالتات من نفس الصنف من نفس العميل من قسم الى قسم اخر
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProductTransfer(ProductTransferDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid data";
+                return RedirectToAction("TransferForm");
+            }
+
+            var client = await _context.Clients.FindAsync(dto.ClientId);
+            if (client == null)
+            {
+                TempData["Error"] = "Client not found";
+                return RedirectToAction("TransferForm");
+            }
+
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == dto.ProductId && p.IsActive);
+
+            if (product == null)
+            {
+                TempData["Error"] = "Product not found";
+                return RedirectToAction("TransferForm");
+            }
+
+            await using var tx = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var outbound = new Outbound
+                {
+                    ClientId = dto.ClientId,
+                    CreatedAt = DateTime.UtcNow,
+                    Details = new List<OutboundDetail>
+            {
+                new OutboundDetail
+                {
+                    ProductId = dto.ProductId,
+                    SectionId = dto.FromSectionId,
+                    Cartons = dto.Cartons,
+                    Pallets = dto.Pallets
+                }
+            }
+                };
+
+                var inbound = new Inbound
+                {
+                    ClientId = dto.ClientId,
+                    CreatedAt = DateTime.UtcNow,
+                    Details = new List<InboundDetail>
+            {
+                new InboundDetail
+                {
+                    ProductId = dto.ProductId,
+                    SectionId = dto.ToSectionId,
+                    Cartons = dto.Cartons,
+                    Pallets = dto.Pallets
+                }
+            }
+                };
+
+                _context.Outbounds.Add(outbound);
+                _context.Inbounds.Add(inbound);
+
+                await _context.SaveChangesAsync();
+                await tx.CommitAsync();
+
+                TempData["Success"] = "Product transfer completed successfully";
+                return RedirectToAction("Details", "Clients", new { id = dto.ClientId });
+            }
+            catch
+            {
+                await tx.RollbackAsync();
+                TempData["Error"] = "Operation failed";
+                return RedirectToAction("TransferForm");
+            }
+        }
+
+
+    }
+}

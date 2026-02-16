@@ -1,0 +1,166 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using InfraStructure.Context;
+using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using MVC.ViewModels.Products;
+
+namespace MVC.Controllers
+{
+    public class ProductsController : Controller
+    {
+        private readonly DBContext _db;
+        private readonly IWebHostEnvironment _env;
+        private const int DefaultPageSize = 10;
+
+        public ProductsController(DBContext db, IWebHostEnvironment env) { _db = db; _env = env; }
+
+        public IActionResult Index(string? search, int page = 1, int pageSize = DefaultPageSize)
+        {
+            var query = _db.Products.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(p => p.Name.Contains(search) || (p.Description ?? string.Empty).Contains(search));
+            }
+
+            var total = query.Count();
+            var items = query.OrderBy(p => p.Name)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+            var vm = new ProductIndexVM
+            {
+                Products = items,
+                Search = search,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = total
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new Product());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Product product, Microsoft.AspNetCore.Http.IFormFile? imageFile)
+        {
+            if (!ModelState.IsValid) return View(product);
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var uploads = Path.Combine(_env.WebRootPath ?? "wwwroot", "images", "products");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+                var fileName = Path.GetRandomFileName() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+                using (var fs = System.IO.File.Create(filePath))
+                {
+                    imageFile.CopyTo(fs);
+                }
+                product.ImageUrl = "/images/products/" + fileName;
+            }
+
+            try
+            {
+                _db.Products.Add(product);
+                _db.SaveChanges();
+                TempData["Success"] = "تم إضافة المنتج.";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "حدث خطأ أثناء إنشاء المنتج.");
+                return View(product);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var product = _db.Products.Find(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Product product, Microsoft.AspNetCore.Http.IFormFile? imageFile)
+        {
+            if (!ModelState.IsValid) return View(product);
+            var existing = _db.Products.Find(product.Id);
+            if (existing == null) return NotFound();
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var uploads = Path.Combine(_env.WebRootPath ?? "wwwroot", "images", "products");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+                var fileName = Path.GetRandomFileName() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+                using (var fs = System.IO.File.Create(filePath))
+                {
+                    imageFile.CopyTo(fs);
+                }
+                // delete old file if exists
+                if (!string.IsNullOrWhiteSpace(existing.ImageUrl) && existing.ImageUrl.StartsWith("/images/"))
+                {
+                    var oldPath = Path.Combine(_env.WebRootPath ?? "wwwroot", existing.ImageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    try { if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath); } catch { }
+                }
+                existing.ImageUrl = "/images/products/" + fileName;
+            }
+
+            existing.Name = product.Name?.Trim() ?? existing.Name;
+            existing.Description = product.Description;
+            existing.Price = product.Price;
+            existing.IsActive = product.IsActive;
+
+            try
+            {
+                _db.Products.Update(existing);
+                _db.SaveChanges();
+                TempData["Success"] = "تم تعديل المنتج.";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, "حدث خطأ أثناء حفظ التغييرات.");
+                return View(product);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var product = _db.Products.Find(id);
+            if (product == null) return NotFound();
+
+            try
+            {
+                // delete file if exists
+                if (!string.IsNullOrWhiteSpace(product.ImageUrl) && product.ImageUrl.StartsWith("/images/"))
+                {
+                    var oldPath = Path.Combine(_env.WebRootPath ?? "wwwroot", product.ImageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    try { if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath); } catch { }
+                }
+
+                _db.Products.Remove(product);
+                _db.SaveChanges();
+                TempData["Success"] = "تم حذف المنتج.";
+            }
+            catch (System.Exception)
+            {
+                TempData["Error"] = "لا يمكن حذف المنتج لأنه مرتبط بسجلات أخرى.";
+            }
+
+            return RedirectToAction("Index");
+        }
+    }
+}

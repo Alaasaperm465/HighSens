@@ -1,0 +1,161 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using InfraStructure.Context;
+using HighSens.Domain;
+using Microsoft.EntityFrameworkCore;
+using MVC.ViewModels.Outbound;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace MVC.Controllers
+{
+    public class OutboundController : Controller
+    {
+        private readonly DBContext _db;
+        public OutboundController(DBContext db) => _db = db;
+
+        public IActionResult Index()
+        {
+            // simple list of outbounds
+            var outbounds = _db.Outbounds.ToList();
+            return View(outbounds);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var vm = new OutboundCreateVM
+            {
+                Clients = _db.Clients.OrderBy(c => c.Name).Select(c => new SelectListItem(c.Name, c.Id.ToString())).ToList(),
+                Products = _db.Products.OrderBy(p => p.Name).Select(p => new SelectListItem(p.Name, p.Id.ToString())).ToList(),
+                Sections = _db.Sections.OrderBy(s => s.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList(),
+                Details = new List<OutboundDetailVM> { new OutboundDetailVM() }
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(OutboundCreateVM vm)
+        {
+            // populate lookups in case of redisplay
+            vm.Clients = _db.Clients.OrderBy(c => c.Name).Select(c => new SelectListItem(c.Name, c.Id.ToString())).ToList();
+            vm.Products = _db.Products.OrderBy(p => p.Name).Select(p => new SelectListItem(p.Name, p.Id.ToString())).ToList();
+            vm.Sections = _db.Sections.OrderBy(s => s.Name).Select(s => new SelectListItem(s.Name, s.Id.ToString())).ToList();
+
+            if (vm.Details == null || vm.Details.Count == 0)
+            {
+                ModelState.AddModelError(string.Empty, "يجب إضافة سطر واحد على الأقل.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            // Validate client
+            var client = _db.Clients.FirstOrDefault(c => c.Id == vm.ClientId);
+            if (client == null)
+            {
+                ModelState.AddModelError(nameof(vm.ClientId), "العميل غير موجود.");
+                return View(vm);
+            }
+
+            // Validate lines and check stock availability
+            foreach (var line in vm.Details.Select((l, idx) => (l, idx)))
+            {
+                var l = line.l;
+                var idx = line.idx;
+
+                if (l.Cartons < 0 || l.Pallets < 0)
+                {
+                    ModelState.AddModelError(string.Empty, $"السطر {idx + 1}: القيم يجب أن تكون موجبة.");
+                    break;
+                }
+
+                var prodExists = _db.Products.Any(p => p.Id == l.ProductId && p.IsActive);
+                if (!prodExists)
+                {
+                    ModelState.AddModelError(string.Empty, $"السطر {idx + 1}: المنتج غير موجود.");
+                    break;
+                }
+
+                var secExists = _db.Sections.Any(s => s.Id == l.SectionId);
+                if (!secExists)
+                {
+                    ModelState.AddModelError(string.Empty, $"السطر {idx + 1}: المخزن غير موجود.");
+                    break;
+                }
+
+                var stock = _db.Stocks.FirstOrDefault(s => s.ClientId == vm.ClientId && s.ProductId == l.ProductId && s.SectionId == l.SectionId);
+                var availableCartons = stock?.Cartons ?? 0;
+                var availablePallets = stock?.Pallets ?? 0;
+                if (availableCartons < l.Cartons || availablePallets < l.Pallets)
+                {
+                    ModelState.AddModelError(string.Empty, $"السطر {idx + 1}: الكمية غير كافية في المخزن (متوفر {availableCartons} كرتون، {availablePallets} بالت).");
+                    break;
+                }
+            }
+
+            if (!ModelState.IsValid) return View(vm);
+
+            // All validation passed - create outbound and update stocks in transaction
+            using var tx = _db.Database.BeginTransaction();
+            try
+            {
+                var outbound = new Outbound { ClientId = vm.ClientId, CreatedAt = DateTime.UtcNow };
+                foreach (var l in vm.Details)
+                {
+                    var detail = new OutboundDetail
+                    {
+                        ProductId = l.ProductId,
+                        SectionId = l.SectionId,
+                        Cartons = l.Cartons,
+                        Pallets = l.Pallets,
+                        Quantity = l.Cartons + (l.Pallets * 100m)
+                    };
+                    outbound.Details.Add(detail);
+
+                    // adjust stock
+                    var stock = _db.Stocks.FirstOrDefault(s => s.ClientId == vm.ClientId && s.ProductId == l.ProductId && s.SectionId == l.SectionId);
+                    if (stock != null)
+                    {
+                        stock.Cartons -= l.Cartons;
+                        stock.Pallets -= l.Pallets;
+                        _db.Stocks.Update(stock);
+                    }
+
+                    // product stock
+                    var prodStock = _db.ProductStocks.FirstOrDefault(ps => ps.ClientId == vm.ClientId && ps.ProductId == l.ProductId);
+                    if (prodStock != null)
+                    {
+                        prodStock.Cartons -= l.Cartons;
+                        prodStock.Pallets -= l.Pallets;
+                        _db.ProductStocks.Update(prodStock);
+                    }
+
+                    // section stock
+                    var secStock = _db.SectionStocks.FirstOrDefault(ss => ss.ClientId == vm.ClientId && ss.SectionId == l.SectionId);
+                    if (secStock != null)
+                    {
+                        secStock.Cartons -= l.Cartons;
+                        secStock.Pallets -= l.Pallets;
+                        _db.SectionStocks.Update(secStock);
+                    }
+                }
+
+                _db.Outbounds.Add(outbound);
+                _db.SaveChanges();
+                tx.Commit();
+
+                TempData["Success"] = "تم إنشاء إذن الصادر بنجاح.";
+                return RedirectToAction("Index");
+            }
+            catch (System.Exception ex)
+            {
+                tx.Rollback();
+                ModelState.AddModelError(string.Empty, "حدث خطأ أثناء إنشاء الإذن.");
+                return View(vm);
+            }
+        }
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page
+@model QuerySectionTotalModel
+@{
+    ViewData["Title"] = "مجموع قسم";
+}
+<div class="container mt-3">
+    <h3>مجموع المخزون في قسم</h3>
+
+    <form method="get" id="queryGetForm" class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label class="form-label">القسم</label>
+            <select id="sectionSelect" name="SectionId" class="form-select">
+                <option value="">-- اختر القسم --</option>
+                @foreach(var s in Model.Sections)
+                {
+                    <option value="@s.Value" selected="@(Model.SectionId.HasValue && Model.SectionId.Value.ToString() == s.Value ? "selected" : null)">@s.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto d-flex gap-2">
+            <button type="submit" class="btn btn-primary">حساب</button>
+            <button type="button" class="btn btn-outline-success" id="executeControllerBtn">نفّذ الأكشن</button>
+        </div>
+        <div class="col-12 mt-2">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+    </form>
+
+    @if (Model.HasResult)
+    {
+        <div class="card mt-3 p-3">
+            <div>SectionId: <strong>@Model.Result.SectionId</strong></div>
+            <div>Total Cartons: <strong>@Model.Result.TotalCartons</strong></div>
+            <div>Total Pallets: <strong>@Model.Result.TotalPallets</strong></div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function(){
+            function postToController(url, data) {
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = url;
+                for (var key in data) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = data[key] ?? '';
+                    form.appendChild(input);
+                }
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+            document.getElementById('executeControllerBtn').addEventListener('click', function(){
+                var sectionId = document.getElementById('sectionSelect').value;
+                if(!sectionId){
+                    alert('اختر القسم أولاً');
+                    return;
+                }
+                postToController('/Query/SectionTotal', { sectionId: sectionId });
+            });
+        })();
+    </script>
+}

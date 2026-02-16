@@ -1,0 +1,98 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using InfraStructure.Context;
+using HighSens.Domain;
+
+namespace MVC.Controllers
+{
+    public class ClientsController : Controller
+    {
+        private readonly DBContext _db;
+        public ClientsController(DBContext db) => _db = db;
+
+        public IActionResult Index()
+        {
+            var clients = _db.Clients.ToList();
+            return View(clients);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Client client)
+        {
+            if (!ModelState.IsValid) return View(client);
+            _db.Clients.Add(client);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var client = _db.Clients.Find(id);
+            if (client == null) return NotFound();
+            return View(client);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Client client)
+        {
+            if (!ModelState.IsValid) return View(client);
+
+            var existing = _db.Clients.Find(client.Id);
+            if (existing == null) return NotFound();
+
+            // Update fields
+            existing.Name = client.Name?.Trim() ?? existing.Name;
+            existing.Address = client.Address?.Trim() ?? existing.Address;
+            existing.PhoneNumber = client.PhoneNumber;
+
+            try
+            {
+                _db.Clients.Update(existing);
+                _db.SaveChanges();
+            }
+            catch (System.Exception)
+            {
+                // log if logger available
+                ModelState.AddModelError(string.Empty, "حدث خطأ أثناء حفظ البيانات.");
+                return View(client);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            var client = _db.Clients.Find(id);
+            if (client == null) return NotFound();
+
+            try
+            {
+                _db.Clients.Remove(client);
+                _db.SaveChanges();
+            }
+            catch (System.Exception)
+            {
+                // handle referential integrity errors if related records exist
+                TempData["Error"] = "لا يمكن حذف هذا العميل لأنه مرتبط ببيانات أخرى.";
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var client = _db.Clients.Find(id);
+            if (client == null) return NotFound();
+            return View(client);
+        }
+    }
+}

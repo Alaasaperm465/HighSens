@@ -1,0 +1,141 @@
+﻿@model MVC.ViewModels.Clients.ClientDetailsVM
+@{
+    ViewData["Title"] = "تفاصيل العميل";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-3">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="mb-0">تفاصيل العميل</h3>
+            <div class="text-muted">@Model.ClientName</div>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+            <a asp-action="Edit" asp-route-id="@Model.ClientId" class="btn btn-outline-primary">تعديل</a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card p-3 mb-3">
+                <h5>معلومات عامة</h5>
+                <div class="mt-2"><strong>الاسم:</strong> @Model.ClientName</div>
+                <div class="mt-1"><strong>العنوان:</strong> @Model.Address</div>
+                <div class="mt-1"><strong>الهاتف:</strong> @Model.PhoneNumber</div>
+            </div>
+
+            <div class="card p-3">
+                <h6>الصادرات / الواردات</h6>
+                <div class="mt-2">
+                    <div>إجمالي الكرتون: <strong>@Model.TotalCartons</strong></div>
+                    <div>إجمالي البالتات: <strong>@Model.TotalPallets</strong></div>
+                </div>
+                <a asp-controller="Query" asp-action="ClientTotalCsv" asp-route-clientId="@Model.ClientId" class="btn btn-outline-secondary btn-sm mt-2">تصدير CSV</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-3 mb-3">
+                <h5>الحركات الأخيرة</h5>
+                @if ((Model.RecentInbounds?.Any() ?? false) || (Model.RecentOutbounds?.Any() ?? false))
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>الواردات</h6>
+                            <div class="list-group">
+                                @foreach(var i in Model.RecentInbounds)
+                                {
+                                    <div class="list-group-item py-2">أذن #@i.Id — @i.CreatedAt.ToLocalTime().ToString("g") — خطوط: @i.DetailsCount</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>الصادرات</h6>
+                            <div class="list-group">
+                                @foreach(var o in Model.RecentOutbounds)
+                                {
+                                    <div class="list-group-item py-2">أذن #@o.Id — @o.CreatedAt.ToLocalTime().ToString("g") — خطوط: @o.DetailsCount</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted">لا توجد حركات حديثة.</div>
+                }
+            </div>
+
+            <div class="card p-3 mb-3">
+                <h5>تفصيل حسب المنتج</h5>
+                @if (Model.Products != null && Model.Products.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead><tr><th>المنتج</th><th class="text-end">كرتون</th><th class="text-end">بالت</th></tr></thead>
+                            <tbody>
+                                @foreach(var p in Model.Products)
+                                {
+                                    <tr>
+                                        <td>@p.ProductName</td>
+                                        <td class="text-end">@p.Cartons</td>
+                                        <td class="text-end">@p.Pallets</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>الإجمالي</th>
+                                    <th class="text-end">@Model.TotalCartons</th>
+                                    <th class="text-end">@Model.TotalPallets</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted">لا توجد بيانات عن المنتجات.</div>
+                }
+            </div>
+
+            <div class="card p-3">
+                <h5>تفصيل حسب المخزن</h5>
+                @if (Model.Sections != null && Model.Sections.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead><tr><th>المخزن</th><th class="text-end">كرتون</th><th class="text-end">بالت</th></tr></thead>
+                            <tbody>
+                                @foreach(var s in Model.Sections)
+                                {
+                                    <tr>
+                                        <td>@s.SectionName</td>
+                                        <td class="text-end">@s.Cartons</td>
+                                        <td class="text-end">@s.Pallets</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted">لا توجد بيانات عن المخازن.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // small enhancement: confirm delete on index uses form so nothing here
+    </script>
+}
