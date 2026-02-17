@@ -177,22 +177,32 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductOverlap(ProductOverlapDto dto)
         {
+            // repopulate view bags when returning view
+            void PopulateLists()
+            {
+                ViewBag.Clients = _db.Clients.OrderBy(c => c.Name).Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(c.Name, c.Id.ToString())).ToList();
+                ViewBag.Products = _db.Products.Where(p => p.IsActive).OrderBy(p => p.Name).Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(p.Name, p.Id.ToString())).ToList();
+                ViewBag.Sections = _db.Sections.OrderBy(s => s.Name).Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(s.Name, s.Id.ToString())).ToList();
+            }
+
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Invalid data";
-                return RedirectToAction("OverlapForm");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
             if (dto.SourceProductId == dto.TargetProductId)
             {
-                TempData["Error"] = "Source and target product must be different";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "???? ?????? ?????? ??? ?? ????? ???????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
             if (dto.Cartons <= 0 && dto.Pallets <= 0)
             {
-                TempData["Error"] = "At least one of cartons or pallets must be greater than zero";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "??? ?? ???? ?????? ???? ?? ???.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
             // Resolve client
@@ -201,7 +211,6 @@ namespace MVC.Controllers
             {
                 client = await _db.Clients.FirstOrDefaultAsync(c => c.Id == dto.ClientId.Value);
             }
-            // optional: could resolve by name if provided
             if (client == null && !string.IsNullOrWhiteSpace(dto.ClientName))
             {
                 var name = dto.ClientName.Trim();
@@ -210,32 +219,29 @@ namespace MVC.Controllers
 
             if (client == null)
             {
-                TempData["Error"] = "Client not found";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "?????? ??? ?????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
-            var sectionExists = await _db.Sections
-                .AnyAsync(s => s.Id == dto.SectionId);
-
+            var sectionExists = await _db.Sections.AnyAsync(s => s.Id == dto.SectionId);
             if (!sectionExists)
             {
-                TempData["Error"] = "Section not found";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "????? ??? ?????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
-            var sourceProduct = await _db.Products
-                .FirstOrDefaultAsync(p => p.Id == dto.SourceProductId && p.IsActive);
-
-            var targetProduct = await _db.Products
-                .FirstOrDefaultAsync(p => p.Id == dto.TargetProductId && p.IsActive);
+            var sourceProduct = await _db.Products.FirstOrDefaultAsync(p => p.Id == dto.SourceProductId && p.IsActive);
+            var targetProduct = await _db.Products.FirstOrDefaultAsync(p => p.Id == dto.TargetProductId && p.IsActive);
 
             if (sourceProduct == null || targetProduct == null)
             {
-                TempData["Error"] = "Invalid products";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "?????? ??? ?????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
-            // ???? ???????
             var inboundCartons = await (
                 from d in _db.InboundDetails
                 join i in _db.Inbounds on d.InboundId equals i.Id
@@ -277,8 +283,9 @@ namespace MVC.Controllers
 
             if (availableCartons < dto.Cartons || availablePallets < dto.Pallets)
             {
-                TempData["Error"] = "Insufficient stock";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "??????? ??? ????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
 
             await using var tx = await _db.Database.BeginTransactionAsync();
@@ -311,14 +318,15 @@ namespace MVC.Controllers
                 await _db.SaveChangesAsync();
                 await tx.CommitAsync();
 
-                TempData["Success"] = "Product overlap completed successfully";
+                TempData["Success"] = "?? ????? ??????? ?????";
                 return RedirectToAction("Details", "Clients", new { id = client.Id });
             }
             catch
             {
                 await tx.RollbackAsync();
-                TempData["Error"] = "Operation failed";
-                return RedirectToAction("OverlapForm");
+                ModelState.AddModelError(string.Empty, "??? ???????.");
+                PopulateLists();
+                return View("OverlapForm", dto);
             }
         }
 
@@ -335,29 +343,35 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProductTransfer(ProductTransferDto dto)
         {
+            void PopulateLists()
+            {
+                ViewBag.Clients = _db.Clients.OrderBy(c => c.Name).Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(c.Name, c.Id.ToString())).ToList();
+                ViewBag.Products = _db.Products.Where(p => p.IsActive).OrderBy(p => p.Name).Select(p => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(p.Name, p.Id.ToString())).ToList();
+                ViewBag.Sections = _db.Sections.OrderBy(s => s.Name).Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(s.Name, s.Id.ToString())).ToList();
+            }
+
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Invalid data";
-                return RedirectToAction("TransferForm");
+                PopulateLists();
+                return View("TransferForm", dto);
             }
 
             var client = await _db.Clients.FindAsync(dto.ClientId);
             if (client == null)
             {
-                TempData["Error"] = "Client not found";
-                return RedirectToAction("TransferForm");
+                ModelState.AddModelError(string.Empty, "?????? ??? ?????.");
+                PopulateLists();
+                return View("TransferForm", dto);
             }
 
-            var product = await _db.Products
-                .FirstOrDefaultAsync(p => p.Id == dto.ProductId && p.IsActive);
-
+            var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == dto.ProductId && p.IsActive);
             if (product == null)
             {
-                TempData["Error"] = "Product not found";
-                return RedirectToAction("TransferForm");
+                ModelState.AddModelError(string.Empty, "?????? ??? ?????.");
+                PopulateLists();
+                return View("TransferForm", dto);
             }
 
-            // calculate available in source section
             var inboundCartons = await (
                 from d in _db.InboundDetails
                 join i in _db.Inbounds on d.InboundId equals i.Id
@@ -376,8 +390,9 @@ namespace MVC.Controllers
 
             if (availableCartons < dto.Cartons)
             {
-                TempData["Error"] = "Insufficient stock in source section";
-                return RedirectToAction("TransferForm");
+                ModelState.AddModelError(string.Empty, "??????? ?? ????? ?????? ??? ????.");
+                PopulateLists();
+                return View("TransferForm", dto);
             }
 
             await using var tx = await _db.Database.BeginTransactionAsync();
@@ -409,14 +424,15 @@ namespace MVC.Controllers
                 await _db.SaveChangesAsync();
                 await tx.CommitAsync();
 
-                TempData["Success"] = "Product transfer completed successfully";
+                TempData["Success"] = "?? ????? ????? ?????";
                 return RedirectToAction("Details", "Clients", new { id = dto.ClientId });
             }
             catch
             {
                 await tx.RollbackAsync();
-                TempData["Error"] = "Operation failed";
-                return RedirectToAction("TransferForm");
+                ModelState.AddModelError(string.Empty, "??? ???????.");
+                PopulateLists();
+                return View("TransferForm", dto);
             }
         }
 
